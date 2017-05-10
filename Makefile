@@ -1,23 +1,25 @@
 NDKPATH = /Android/android-ndk-r14b
 TOOLPATH= $(NDKPATH)/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64/bin
-#TOOLPATH= $(NDKPATH)/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64/bin
 TOOLPREFIX= $(TOOLPATH)/arm-linux-androideabi-
-#TOOLPREFIX= $(TOOLPATH)/aarch64-linux-android-
 SYSROOT= $(NDKPATH)/platforms/android-9/arch-arm
+CC= $(TOOLPREFIX)g++
 
-CC= $(TOOLPREFIX)gcc
+#INCLUDE_PATH:=-I/usr/include
+#LIBRARY_PATH:=-L/usr/lib
+LIBS:=
 
-CFLAGS= -Wall --sysroot=$(SYSROOT) -static
+CFLAGS= -Wall --sysroot=$(SYSROOT) -static $(INCLUDE_PATH)
 
-$(info $(NDKPATH))
-$(info $(TOOLPATH))
-$(info $(TOOLPREFIX))
-$(info $(SYSROOT))
-hello: hello.c
-	$(info Building Hello)
-	$(info $(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^)
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^
+SOURCES=$(wildcard src/*.cpp)
+OBJECTS=$(patsubst %.cpp,%.o, $(SOURCES))
+
+all: ${OBJECTS}
+	${CC} ${CFLAGS} -o pinball ${OBJECTS} ${LIBS}
 
 clean:
-	rm -rf *.o
-	rm -rf hello
+	rm -f src/*.o
+	rm -f pinball
+
+.cpp.o:
+	$(info OBJ $< ($@))
+	${CC} ${CFLAGS} ${INCLUDE_PATH} -c $< -o $@
