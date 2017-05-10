@@ -4,11 +4,14 @@ TOOLPREFIX= $(TOOLPATH)/arm-linux-androideabi-
 SYSROOT= $(NDKPATH)/platforms/android-9/arch-arm
 CC= $(TOOLPREFIX)g++
 
+
 #INCLUDE_PATH:=-I/usr/include
 #LIBRARY_PATH:=-L/usr/lib
 LIBS:=
 
+
 CFLAGS= -Wall --sysroot=$(SYSROOT) -static $(INCLUDE_PATH)
+
 
 SOURCES=$(wildcard src/*.cpp)
 OBJECTS=$(patsubst %.cpp,%.o, $(SOURCES))
