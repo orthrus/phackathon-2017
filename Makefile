@@ -5,7 +5,7 @@ TOOLPREFIX= $(TOOLPATH)/arm-linux-androideabi-
 #TOOLPREFIX= $(TOOLPATH)/aarch64-linux-android-
 SYSROOT= $(NDKPATH)/platforms/android-9/arch-arm
 
-CC= $(TOOLPREFIX)gcc
+CC= $(TOOLPREFIX)g++
 
 CFLAGS= -Wall --sysroot=$(SYSROOT) -static
 
@@ -13,11 +13,12 @@ $(info $(NDKPATH))
 $(info $(TOOLPATH))
 $(info $(TOOLPREFIX))
 $(info $(SYSROOT))
-hello: hello.c
-	$(info Building Hello)
+all: pinball.cpp rs232.c serial.cpp
+
+	$(info Building Pinball)
 	$(info $(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^
 
 clean:
 	rm -rf *.o
-	rm -rf hello
+	rm -rf all
