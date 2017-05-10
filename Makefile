@@ -1,11 +1,11 @@
 NDKPATH = /Android/android-ndk-r14b
-#TOOLPATH= $(NDKPATH)/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64/bin
-TOOLPATH= $(NDKPATH)/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64/bin
-#TOOLPREFIX= $(TOOLPATH)/arm-linux-androideabi-
-TOOLPREFIX= $(TOOLPATH)/aarch64-linux-android-
-SYSROOT= $(NDKPATH)/platforms/android-24/arch-arm64
+TOOLPATH= $(NDKPATH)/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64/bin
+#TOOLPATH= $(NDKPATH)/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64/bin
+TOOLPREFIX= $(TOOLPATH)/arm-linux-androideabi-
+#TOOLPREFIX= $(TOOLPATH)/aarch64-linux-android-
+SYSROOT= $(NDKPATH)/platforms/android-9/arch-arm
 
-CC= $(TOOLPREFIX)gcc 
+CC= $(TOOLPREFIX)gcc
 
 CFLAGS= -Wall --sysroot=$(SYSROOT) -static
 
