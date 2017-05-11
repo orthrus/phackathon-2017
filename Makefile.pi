@@ -7,12 +7,17 @@ LIBRARY_PATH:=-L/usr/lib \
 
 #SHARED_LIBS:= -Bdynamic
 
-STATIC_LIBS:=	-Bdynamic			\
-				-lopencv_calib3d		\
-				-lopencv_core				\
+STATIC_LIBS:=	-Bstatic			\
+
+
+			-lopencv_core				\
+			-lopencv_videoio		\
+			-lopencv_highgui		\
+
+
+#				-lopencv_calib3d		\
 				-lopencv_features2d	\
 				-lopencv_flann			\
-				-lopencv_highgui		\
 				-lopencv_imgproc		\
 				-lopencv_ml					\
 				-lopencv_objdetect	\
@@ -21,11 +26,8 @@ STATIC_LIBS:=	-Bdynamic			\
 				-lopencv_superres		\
 				-lopencv_video			\
 				-lopencv_videostab 	\
-				-lc 								\
-				-lstdc++						\
-				-lopencv_videoio		\
 				-lopencv_shape			\
-				-lopencv_imgcodecs	\
+				-lopencv_imgcodecs	
 
 #				-lopencv_contrib		\
 				-lopencv_legacy			\
