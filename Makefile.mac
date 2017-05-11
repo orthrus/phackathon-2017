@@ -1,14 +1,41 @@
-NDKPATH =
-TOOLPATH=
-TOOLPREFIX=
-SYSROOT=
-CC= $(TOOLPREFIX)g++
+CC=g++
 
-INCLUDE_PATH:=-I/usr/local/include
-LIBRARY_PATH:=-L/usr/lib -L/usr/local/lib
-LIBS:=
+INCLUDE_PATH:=-I/usr/include \
+							-I/usr/local/include/opencv \
+							-I/usr/local/include
 
-CFLAGS=-std=c++14 -Wall $(INCLUDE_PATH) -D__linux__ -D__macos__
+LIBRARY_PATH:=-L/usr/lib \
+							-L/usr/lib/arm-linux-gnueabihf \
+							-L/usr/local/lib
+
+LIBS:=	-lopencv_shape \
+				-lopencv_stitching \
+				-lopencv_objdetect \
+				-lopencv_superres \
+				-lopencv_videostab \
+				-lopencv_calib3d \
+				-lopencv_features2d \
+				-lopencv_highgui \
+				-lopencv_videoio \
+				-lopencv_imgcodecs \
+				-lopencv_video \
+				-lopencv_photo \
+				-lopencv_ml \
+				-lopencv_imgproc \
+				-lopencv_flann \
+				-lopencv_core \
+				-lpthread \
+				-lavformat \
+				-lavcodec \
+				-lswscale \
+				-lavutil \
+				-lz \
+				-lgsm \
+				-lmp3lame \
+				-ljpeg \
+				-lopenjp2
+
+CFLAGS= -std=c++14 -Wall $(INCLUDE_PATH) -D__linux__ -O3
 
 SOURCES=$(wildcard src/*.cpp)
 OBJECTS=$(patsubst %.cpp,%.o, $(SOURCES))
