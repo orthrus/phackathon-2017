@@ -94,9 +94,15 @@ void CCam::Start()
         {
           std::lock_guard<std::mutex> lock(_mutex);
           if(!diffFrame.empty())
+          {
+            std::cout << "clone diff" << std::endl;
             diff = diffFrame.clone();
+          }
           if(!threshFrame.empty())
+          {
+            std::cout << "clone thresh" << std::endl;
             thresh = threshFrame.clone();
+          }
         }
 
         if(!diff.empty())
