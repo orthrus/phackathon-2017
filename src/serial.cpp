@@ -175,6 +175,7 @@ void *CSerial::doAsyncRead( void *ptr )
 
 void CSerial::doRead()
 {
+	char pReadBuf[4096];
 	while(true)
 	{
 		usleep(1000000);
