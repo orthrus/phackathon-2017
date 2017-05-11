@@ -559,6 +559,7 @@ int main(){
 			{
 				capture.read(*previousFrame);
 
+				std::cout << "process previous" << std::endl;
 				processFrame(*previousFrame, maskImage, iblur);
 
 				first = false;
@@ -568,23 +569,30 @@ int main(){
 			capture.read(*currentFrame);
 			currentFrame = &frame2;
 
+			std::cout << "process current" << std::endl;
 			processFrame(*currentFrame, maskImage, iblur);
 
 			//perform frame differencing with the sequential images. This will output an "intensity image"
 			//do not confuse this with a threshold image, we will need to perform thresholding afterwards.
+			std::cout << "diff" << std::endl;
 			cv::absdiff(*previousFrame, *currentFrame, differenceImage);
 			//threshold intensity image at a given sensitivity value
+			
+			std::cout << "threshold1" << std::endl;
 			cv::threshold(differenceImage, thresholdImage, isens, 255, THRESH_BINARY);
 
 			//use blur() to smooth the image, remove possible noise and
 			//increase the size of the object we are trying to track. (Much like dilate and erode)
+			
+			std::cout << "blur" << std::endl;
 			cv::blur(thresholdImage, thresholdImage, cvSize(iblur2, iblur2));
 			//threshold again to obtain binary image from blur output
+			std::cout << "threshold2" << std::endl;
 			cv::threshold(thresholdImage, output, isens2, 255, THRESH_BINARY);
 
 			//if tracking enabled, search for contours in our thresholded image
 			if (trackingEnabled) {
-
+				std::cout << "search" << std::endl;
 				searchForMovement(debugMode, output, *currentFrame);
 				
 				if (debugMode)
