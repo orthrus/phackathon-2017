@@ -36,7 +36,7 @@ void CCam::Start()
       cv::VideoWriter recorder;
       int ex = static_cast<int>(_capture.get(CV_CAP_PROP_FOURCC));     // Get Codec Type- Int form
 
-      recoder.open("/home/pi/video.avi", ex, 60, Size(480, 320), true);
+      //recoder.open("/home/pi/video.avi", ex, 60, Size(480, 320), true);
 
       while(_capture.read(frame))
       {
@@ -47,7 +47,7 @@ void CCam::Start()
           first = false;
         }
 
-        
+
 
         
         cv::waitKey(1);
