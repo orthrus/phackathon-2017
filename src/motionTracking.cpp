@@ -255,11 +255,13 @@ void searchForMovement(bool debug, Mat input, Mat &cameraFeed){
 
 			if (debug) {
 				if (left) {
-					fillRegion(cameraFeed, leftRegion, Scalar(255, 0, 255));
+					auto sc = Scalar(255, 0, 255);
+					fillRegion(cameraFeed, leftRegion, sc);
 				}
 
 				if (right) {
-					fillRegion(cameraFeed, rightRegion, Scalar(255, 0, 255));
+					auto sc = Scalar(255, 0, 255);
+					fillRegion(cameraFeed, rightRegion, sc);
 				}
 			}
 
