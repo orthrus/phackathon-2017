@@ -67,6 +67,7 @@ void CCam::Start()
             {
               std::cout << "set diffFrame" << std::endl;
               diffFrame = diffFrameTmp.clone();
+              std::cout << "diff empty = " << diffFrame.empty() << std::endl;
             }
             threshFrame = threshFrameTmp.clone();
           }
@@ -89,9 +90,11 @@ void CCam::Start()
 
       });
 
+
+      cv::namedWindow("diff");
+
       cv::Mat diff;
       cv::Mat thresh;
-      cv::namedWindow("diff");
 
       while(_running)
       {
