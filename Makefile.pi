@@ -24,8 +24,8 @@ CC=g++
 				-lopencv_ts
 
 
-OPENCV_INCLUDES:=pkg-config --cflags opencv
-OPENCV_LIBS:=pkg-config --libs opencv
+OPENCV_INCLUDES:=`pkg-config --cflags opencv`
+OPENCV_LIBS:=`pkg-config --libs opencv`
 
 INCLUDE_PATH:=-I/usr/include \
 							${OPENCV_INCLUDES}
