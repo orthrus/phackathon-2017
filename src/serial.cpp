@@ -10,8 +10,6 @@
 #include "rs232.h"
 #include <errno.h>
 
-void *print_message_function( void *ptr );
-
 CSerial::CSerial()
 {
 	m_iPort=16;
@@ -34,6 +32,8 @@ void CSerial::init(bool bResult )
 	m_cAddress = szReadBuffer[1];
 	m_bResult = bResult;
 
+	pthread_t thread1;
+	pthread_create( &thread1, NULL, doAsyncRead, pParam);
 }
 void CSerial::exit()
 {
@@ -164,6 +164,45 @@ void CSerial::setSingleRelais( bool bEnable, const char cStatus )
 	char szReadBuffer[4096];
 	int iReadBufferSize = 4096;
 	writeAndReadSerial(szWriteBuffer, sizeof(szWriteBuffer), szReadBuffer, iReadBufferSize);
+}
+
+
+void *CSerial::doAsyncRead( void *ptr )
+{
+	((CSerial*)ptr)->doRead();
+
+}
+
+void CSerial::doRead()
+{
+	while(true)
+	{
+		usleep(1000000);
+
+		unsigned char szTmp[1024];
+		int iTmpLen = 0;
+		int iTimeOut = 10 * 1000 * 1000; //timeout in uS
+		int iPollTime = 1 * 1000 * 1000; // polltime in uS
+		int iCurrentTime = 0;
+		while ( ( iTmpLen = RS232_PollComport(m_iPort, szTmp, sizeof(szTmp) ) ) >= 0 && iCurrentTime < iTimeOut )
+		{
+			//printf("RS232_PollComport returned[%d].\n", iTmpLen);
+			for ( int i = 0; i < iTmpLen; i++ )
+			{
+				pReadBuf[iReadBufLen] = szTmp[i];
+				iReadBufLen++;
+				if ( iReadBufLen == iReadBufMaxLen )
+				{
+					iReadBufLen = 0;
+					//printf("RS232 read too many bytes. Exceeding {%u}", iReadBufMaxLen);
+				}
+			}
+			usleep(iPollTime);
+			iCurrentTime+=iPollTime;
+		}
+		//printf( "\nOUTPUT: %s \n",printHexString(pReadBuf,iReadBufLen));
+	}
+
 }
 
 void CSerial::writeAndReadSerial( const char* pSendBuf, const int iSendBufLen, char* pReadBuf, int& iReadBufLen )

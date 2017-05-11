@@ -46,6 +46,9 @@ private:
 	static void *doAsyncFlipper( void *ptr );
 	void setSingleRelais( bool bEnable, const char cStatus );
 
+	static void *doAsyncRead( void *ptr );
+	void doRead();
+	
   int m_iPort;
 	bool m_bResult;
 	char readRelaisStatus();
