@@ -22,7 +22,7 @@ void CCam::Start()
 
     _capture.set(CV_CAP_PROP_FRAME_WIDTH, 720);
     _capture.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
-    if(_capture.set(CV_CAP_PROP_FPS, 60))
+    if(_capture.set(CV_CAP_PROP_FPS, 100))
     {
       std::cout << "Set framerate" << std::endl;
 
