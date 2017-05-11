@@ -23,15 +23,18 @@
 #include <opencv2/highgui.hpp>
 
 #include <ctime>
+#ifdef __linux__
 #include "serial.h"
+#endif
 #include <time.h>
 //#include "Leap.h"
 
 using namespace std;
 using namespace cv;
 
-
+#ifdef __linux__
 CSerial ser;
+#endif
 
 //our sensitivity value to be used in the threshold() function
 const static int SENSITIVITY_VALUE = 60;
@@ -453,8 +456,10 @@ long long getTimeMs()
 }
 
 int main(){
+	#ifdef __linux__
 	ser.init(false);
 	ser.reset();
+	#endif
 
 	triggerFlipBottomLeft.id = 1;
 	triggerFlipBottomLeft.region.push_back(Point2f(718, 288));
@@ -671,7 +676,9 @@ int main(){
 	delete historyHits;
 	delete historyPositions;
 
+	#ifdef __linux__
 	ser.exit();
+	#endif
 	return 0;
 
 }
