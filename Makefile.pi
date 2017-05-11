@@ -23,14 +23,16 @@ STATIC_LIBS:=	-Bdynamic			\
 				-lopencv_videostab 	\
 				-lc 								\
 				-lstdc++						\
-				-lopencv_contrib		\
+				-lopencv_videoio		\
+				-lopencv_shape			\
+				-lopencv_imgcodecs	\
+
+#				-lopencv_contrib		\
 				-lopencv_legacy			\
 				-lopencv_ocl				\
 				-lopencv_ts
-				
-#				-lopencv_videoio		\
-				-lopencv_shape			\
-				-lopencv_imgcodecs	\
+
+
 
 
 CFLAGS= -std=c++14 -Wall -static $(INCLUDE_PATH)
