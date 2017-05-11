@@ -45,7 +45,7 @@ void CCam::Start()
         std::string frameNumberString = ss.str();
         cv::putText(frame, frameNumberString.c_str(), cv::Point(15, 15), CV_FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 0, 0));
 
-        if(i++ % 60 == 0)
+        if((i++) % 60 == 0)
         {
           struct timespec spec;
           clock_gettime(CLOCK_REALTIME, &spec);
