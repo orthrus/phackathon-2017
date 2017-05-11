@@ -43,11 +43,6 @@ extern "C" {
 
 #include <stdio.h>
 #include <string.h>
-
-
-
-#ifdef __linux__
-
 #include <termios.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
@@ -55,16 +50,6 @@ extern "C" {
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <limits.h>
-
-#else
-
-#include <windows.h>
-
-#endif
-
-#ifdef __macos__
-#include <sys/termios.h>
-#endif
 
 int RS232_OpenComport(int, int, const char *);
 int RS232_PollComport(int, unsigned char *, int);

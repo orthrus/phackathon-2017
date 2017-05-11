@@ -22,9 +22,11 @@
 
 #include <opencv2/highgui.hpp>
 #include <ctime>
+#include "serial.h"
 
 using namespace std;
 using namespace cv;
+CSerial ser;
 
 //our sensitivity value to be used in the threshold() function
 const static int SENSITIVITY_VALUE = 60;
@@ -144,11 +146,13 @@ void fillRegion(Mat img, vector<Point2f>& region, Scalar& col)
 
 void flipLeft()
 {
+	ser.flipper(CSerial::BOTTONLEFT);
 	cout << "FLIP LEFT\n";
 }
 
 void flipRight()
 {
+	ser.flipper(CSerial::BOTTOMRIGHT);
 	cout << "FLIP RIGHT\n";
 }
 
@@ -328,7 +332,10 @@ struct Setting
 
 std::vector<Setting*> settings;
 
-/*int main(){
+int main()
+{
+	ser.init(false);
+	ser.reset();
 
 	leftRegion.push_back(Point2f(646, 139));
 	leftRegion.push_back(Point2f(755, 139));
@@ -524,6 +531,6 @@ std::vector<Setting*> settings;
 	delete historyHits;
 	delete historyPositions;
 
+	ser.exit();
 	return 0;
-
-}*/
+}
