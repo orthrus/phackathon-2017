@@ -14,6 +14,8 @@ CCam::~CCam()
 {
 }
 
+using namespace cv;
+using namespace std;
 void CCam::Start()
 {
   std::cout << "Opening camera" << std::endl;
@@ -21,8 +23,8 @@ void CCam::Start()
   {
     std::cout << "Camera opened" << std::endl;
 
-    _capture.set(CV_CAP_PROP_FRAME_WIDTH, 720);
-    _capture.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
+    _capture.set(CV_CAP_PROP_FRAME_WIDTH, 480);
+    _capture.set(CV_CAP_PROP_FRAME_HEIGHT, 320);
     if(_capture.set(CV_CAP_PROP_FPS, 60))
     {
       std::cout << "Set framerate" << std::endl;
@@ -30,6 +32,12 @@ void CCam::Start()
       cv::namedWindow("frame");
       cv::Mat frame;
       bool first = true;
+
+      cv::VideoWriter recorder;
+      int ex = static_cast<int>(_capture.get(CV_CAP_PROP_FOURCC));     // Get Codec Type- Int form
+
+      recoder.open("/home/pi/video.avi", ex, 60, Size(480, 320), true);
+
       while(_capture.read(frame))
       {
         cv::imshow("frame", frame);
@@ -38,6 +46,10 @@ void CCam::Start()
           cv::imwrite("/home/pi/baseline.jpg", frame);
           first = false;
         }
+
+        
+
+        
         cv::waitKey(1);
       }
 
