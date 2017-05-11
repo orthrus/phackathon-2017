@@ -28,7 +28,7 @@ void CCam::Start()
       std::cout << "Set framerate" << std::endl;
 
       //cv::startWindowThread();
-      cv::namedWindow("diff");
+
       //cv::namedWindow("thresh");
       std::cout << "Created window" << std::endl;
       _running = true;
@@ -46,6 +46,7 @@ void CCam::Start()
       std::thread t = std::thread([=]() {
         cv::Mat diff;
         cv::Mat thresh;
+        cv::namedWindow("diff");
 
         while(_running)
         {
