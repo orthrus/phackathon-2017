@@ -658,7 +658,7 @@ int main(){
 				{
 					std::cout << "reading " << counter << " frames took " << currTime - prevTime << "ms" << std::endl;
 				}
-				prevTime = curTime;
+				prevTime = currTime;
 				counter = 0;
 			}
 		}
