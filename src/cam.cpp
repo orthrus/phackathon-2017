@@ -37,11 +37,11 @@ void CCam::Start()
 
       cv::Mat diffFrame, threshFrame;
 
+      cv::Mat frame1, frame2, diffFrameTmp, threshFrameTmp;
       long long prevTime = 0;
       long long curTime = 0;
 
       std::thread t = std::thread([=]() mutable {
-        cv::Mat frame1, frame2, diffFrameTmp, threshFrameTmp;
 
         while(_running)
         {
