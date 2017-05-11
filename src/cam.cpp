@@ -18,7 +18,7 @@ void CCam::Start()
   {
     std::cout << "Camera opened" << std::endl;
 
-    if(_capture.set(CV_CAP_PROPS_FPS, 60))
+    if(_capture.set(CV_CAP_PROP_FPS, 60))
     {
       std::cout << "Set framerate" << std::endl;
 
