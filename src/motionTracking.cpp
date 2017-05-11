@@ -568,11 +568,11 @@ int main(){
 			capture.read(*currentFrame);
 			currentFrame = &frame2;
 
-			/*processFrame(frame2, maskImage, iblur);
+			processFrame(*currentFrame, maskImage, iblur);
 
 			//perform frame differencing with the sequential images. This will output an "intensity image"
 			//do not confuse this with a threshold image, we will need to perform thresholding afterwards.
-			cv::absdiff(frame1, frame2, differenceImage);
+			cv::absdiff(*previousFrame, *currentFrame, differenceImage);
 			//threshold intensity image at a given sensitivity value
 			cv::threshold(differenceImage, thresholdImage, isens, 255, THRESH_BINARY);
 
@@ -585,11 +585,11 @@ int main(){
 			//if tracking enabled, search for contours in our thresholded image
 			if (trackingEnabled) {
 
-				searchForMovement(debugMode, output,frame2);
+				searchForMovement(debugMode, output, *currentFrame);
 				
 				if (debugMode)
 				{
-					imshow("debug", frame2);
+					imshow("debug", *currentFrame);
 				}
 				else
 				{
@@ -607,7 +607,7 @@ int main(){
 			//if removed, frames will not have enough time to referesh and a blank 
 			//image will appear.
 
-			*/
+			
 			switch(waitKey(debugMode?1:1)){
 
 			case 27: //'esc' key has been pressed, exit program.
