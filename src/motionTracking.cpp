@@ -21,7 +21,7 @@
 #include <functional>
 
 #include <opencv2/highgui.hpp>
-#include <windows.h>
+
 #include <ctime>
 #include "serial.h"
 //#include "Leap.h"
