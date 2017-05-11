@@ -146,13 +146,13 @@ void fillRegion(Mat img, vector<Point2f>& region, Scalar& col)
 
 void flipLeft()
 {
-	ser.flipper(CSerial::BOTTONLEFT);
+	ser.flipper(CSerial::BOTTOMLEFT, 100);
 	cout << "FLIP LEFT\n";
 }
 
 void flipRight()
 {
-	ser.flipper(CSerial::BOTTOMRIGHT);
+	ser.flipper(CSerial::BOTTOMRIGHT, 100);
 	cout << "FLIP RIGHT\n";
 }
 
