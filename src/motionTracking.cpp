@@ -70,7 +70,7 @@ struct TPosition
 vector<Point2f> leftRegion;
 vector<Point2f> rightRegion;
 
-double latency = 2.5;
+double latency = 2.0;
 
 
 class History
@@ -503,8 +503,8 @@ int main(){
 	if (!capture.isOpened())  // check if we succeeded
 		return -1;
 
-	capture.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
-	capture.set(CV_CAP_PROP_FRAME_WIDTH, 720);
+	capture.set(CV_CAP_PROP_FRAME_HEIGHT, 320);
+	capture.set(CV_CAP_PROP_FRAME_WIDTH, 480);
 	capture.set(CV_CAP_PROP_FPS, 60);
 
 	bool fromFile = false;
