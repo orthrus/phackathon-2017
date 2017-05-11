@@ -95,7 +95,6 @@ void CCam::Start()
 
       });
 
-
       cv::namedWindow("diff");
 
       while(_running)
