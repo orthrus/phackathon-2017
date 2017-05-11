@@ -559,7 +559,7 @@ int main(){
 			//copy second frame
 			capture.read(frame2);
 
-			processFrame(frame2, maskImage, iblur);
+			/*processFrame(frame2, maskImage, iblur);
 
 			//perform frame differencing with the sequential images. This will output an "intensity image"
 			//do not confuse this with a threshold image, we will need to perform thresholding afterwards.
@@ -597,6 +597,8 @@ int main(){
 			//this 10ms delay is necessary for proper operation of this program
 			//if removed, frames will not have enough time to referesh and a blank 
 			//image will appear.
+
+			*/
 			switch(waitKey(debugMode?1:1)){
 
 			case 27: //'esc' key has been pressed, exit program.
