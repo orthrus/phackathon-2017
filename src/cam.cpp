@@ -18,6 +18,8 @@ void CCam::Start()
   {
     std::cout << "Camera opened" << std::endl;
 
+    _capture.set(CV_CAP_PROP_FRAME_WIDTH, 1280);
+    _capture.set(CV_CAP_PROP_FRAME_HEIGHT, 7200);
     if(_capture.set(CV_CAP_PROP_FPS, 60))
     {
       std::cout << "Set framerate" << std::endl;
