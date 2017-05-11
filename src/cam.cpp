@@ -32,6 +32,7 @@ void CCam::Start()
       while(_capture.read(frame))
       {
         cv::imshow("frame", frame);
+        cv::imwrite("/home/pi/baseline.jpg", frame);
         cv::waitKey(1);
       }
 
