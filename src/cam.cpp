@@ -40,10 +40,10 @@ void CCam::Start()
 
       long long prevTime = 0;
       long long curTime = 0;
+      cv::Mat frame1;
 
       std::thread t = std::thread([=]() mutable {
-        cv::Mat frame1;
-
+        
         while(_running)
         {
           cv::Mat frame2, diffFrameTmp, threshFrameTmp;
@@ -118,7 +118,7 @@ void CCam::Start()
         if(!diff.empty())
         {
           std::cout << "show frame" << std::endl;
-          cv::imshow("diff", frame1);
+          cv::imshow("diff", frame);
         }
         //std::cout << "waitkey1" << std::endl;
         cv::waitKey(1);
