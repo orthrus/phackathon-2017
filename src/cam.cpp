@@ -63,6 +63,7 @@ void CCam::Start()
           cv::absdiff(frame1, frame2, diffFrameTmp);
           cv::threshold(diffFrameTmp, threshFrameTmp, 80, 255, cv::THRESH_BINARY);
 
+          diffFrameTmp.addref();
           {
             std::lock_guard<std::mutex> lock(_mutex);
             if(!diffFrameTmp.empty())
@@ -118,7 +119,7 @@ void CCam::Start()
         if(!diff.empty())
         {
           std::cout << "show frame" << std::endl;
-          cv::imshow("diff", frame);
+          cv::imshow("diff", diff);
         }
         //std::cout << "waitkey1" << std::endl;
         cv::waitKey(1);
