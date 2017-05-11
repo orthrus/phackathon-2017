@@ -37,7 +37,6 @@ LIBS:=	-lopencv_shape \
 
 CFLAGS= -std=c++14 -Wall $(INCLUDE_PATH)
 
-
 SOURCES=$(wildcard src/*.cpp)
 OBJECTS=$(patsubst %.cpp,%.o, $(SOURCES))
 

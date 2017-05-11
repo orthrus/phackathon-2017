@@ -22,6 +22,14 @@ void CCam::Start()
     {
       std::cout << "Set framerate" << std::endl;
 
+      cv::namedWindow("frame");
+
+      cv::Mat frame;
+      while(capture.read(frame))
+      {
+        cv::imshow("frame", frame);
+        cv.waitKey(1);
+      }
 
 
     }
