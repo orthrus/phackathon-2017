@@ -6,7 +6,7 @@ INCLUDE_PATH:=-I/usr/include \
 LIBRARY_PATH:=-L/usr/lib \
 							-L/usr/share/lib
 
-LIBS:=
+LIBS:=-lopencv_core -lopencv_video -lopencv_videoio -lopencv_objdetect
 	#-llibstlport_static
 
 CFLAGS= -std=c++14 -Wall -static $(INCLUDE_PATH)
