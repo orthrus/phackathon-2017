@@ -28,7 +28,7 @@ void CCam::Start()
       while(capture.read(frame))
       {
         cv::imshow("frame", frame);
-        cv.waitKey(1);
+        cv::waitKey(1);
       }
 
 
