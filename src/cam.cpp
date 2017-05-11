@@ -44,69 +44,71 @@ void CCam::Start()
       long long curTime = 0;
 
       std::thread t = std::thread([=]() {
-        cv::Mat diff;
-        cv::Mat thresh;
-        cv::namedWindow("diff");
-
         while(_running)
         {
+          if(frame1.empty())
           {
-            std::lock_guard<std::mutex> lock(_mutex);
-            if(!diffFrame.empty())
-              diff = diffFrame.clone();
-            if(!threshFrame.empty())
-              thresh = threshFrame.clone();
+            if(!_capture.read(frame1))
+            {
+              break;
+            }
           }
 
-          if(!diff.empty())
+          if(!_capture.read(frame2))
           {
-            std::cout << "show frame" << std::endl;
-            cv::imshow("diff", diff);
+            break;
           }
-          cv::waitKey(1);
+
+          cv::absdiff(frame1, frame2, diffFrameTmp);
+          cv::threshold(diffFrame, threshFrameTmp, 80, 255, cv::THRESH_BINARY);
+
+          {
+            std::lock_guard<std::mutex> lock(_mutex);
+            diffFrame = diffFrameTmp.clone();
+            threshFrame = threshFrameTmp.clone();
+          }
+
+          frame1 = frame2.clone();
+
+          if((i++) % 60 == 0)
+          {
+            struct timespec spec;
+            clock_gettime(CLOCK_REALTIME, &spec);
+            curTime = (spec.tv_sec * 1000) + round(spec.tv_nsec / 1.0e6);
+            if(prevTime != 0)
+            {
+              std::cout << "reading " << i - prevI << " frames took " << curTime - prevTime << "ms" << std::endl;
+            }
+            prevTime = curTime;
+            prevI = i;
+          }
         }
 
       });
 
+      cv::Mat diff;
+      cv::Mat thresh;
+      cv::namedWindow("diff");
+
       while(_running)
       {
-        if(frame1.empty())
-        {
-          if(!_capture.read(frame1))
-          {
-            break;
-          }
-        }
-
-        if(!_capture.read(frame2))
-        {
-          break;
-        }
-
-        cv::absdiff(frame1, frame2, diffFrameTmp);
-        cv::threshold(diffFrame, threshFrameTmp, 80, 255, cv::THRESH_BINARY);
-
         {
           std::lock_guard<std::mutex> lock(_mutex);
-          diffFrame = diffFrameTmp.clone();
-          threshFrame = threshFrameTmp.clone();
+          if(!diffFrame.empty())
+            diff = diffFrame.clone();
+          if(!threshFrame.empty())
+            thresh = threshFrame.clone();
         }
 
-        frame1 = frame2.clone();
-
-        if((i++) % 60 == 0)
+        if(!diff.empty())
         {
-          struct timespec spec;
-          clock_gettime(CLOCK_REALTIME, &spec);
-          curTime = (spec.tv_sec * 1000) + round(spec.tv_nsec / 1.0e6);
-          if(prevTime != 0)
-          {
-            std::cout << "reading " << i - prevI << " frames took " << curTime - prevTime << "ms" << std::endl;
-          }
-          prevTime = curTime;
-          prevI = i;
+          std::cout << "show frame" << std::endl;
+          cv::imshow("diff", diff);
         }
+        cv::waitKey(1);
       }
+
+
 
       std::cout << "Stopped reading" << std::endl;
       _running = false;
