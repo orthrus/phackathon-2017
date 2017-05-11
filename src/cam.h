@@ -17,6 +17,7 @@ public:
   void Start();
 
 private:
+  bool _running;
   cv::VideoCapture _capture;
 };
 
