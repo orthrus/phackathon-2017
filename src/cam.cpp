@@ -76,7 +76,7 @@ void CCam::Start()
         }
 
         cv::imshow("diff", diffFrame);
-        cv::imshow("thresh", threshFrame);
+        //cv::imshow("thresh", threshFrame);
         cv::waitKey(1);
       }
 
