@@ -293,7 +293,7 @@ bool testTrigger(const Point& point1, const Point& point2, const FlipTrigger& fl
 	return intersection(point1, point2, *previous, *first);
 }
 
-void searchForMovement(bool debug, Mat input, Mat &cameraFeed){
+void searchForMovement(bool debug, const Mat& input, Mat &cameraFeed){
 	//notice how we use the '&' operator for the cameraFeed. This is because we wish
 	//to take the values passed into the function and manipulate them, rather than just working with a copy.
 	//eg. we draw to the cameraFeed in this function which is then displayed in the main() function.
@@ -411,7 +411,7 @@ void searchForMovement(bool debug, Mat input, Mat &cameraFeed){
 
 }
 
-void processFrame(Mat &capture, Mat mask, int blur)
+void processFrame(Mat &capture, Mat& mask, int blur)
 {
 	if (mask.data) {
 		cv::bitwise_and(capture, mask, capture);
