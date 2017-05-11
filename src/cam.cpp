@@ -22,7 +22,7 @@ void CCam::Start()
 
     _capture.set(CV_CAP_PROP_FRAME_WIDTH, 720);
     _capture.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
-    if(_capture.set(CV_CAP_PROP_FPS, 100))
+    if(_capture.set(CV_CAP_PROP_FPS, 60))
     {
       std::cout << "Set framerate" << std::endl;
 
@@ -32,18 +32,34 @@ void CCam::Start()
       _running = true;
 
       int i = 0, prevI = 0;
-      cv::Mat frame;
+      cv::Mat frame1;
+      cv::Mat frame2;
+
+      cv::Mat diffFrame;
+      cv::Mat threshFrame;
 
       long long prevTime = 0;
       long long curTime = 0;;
-      while (_capture.read(frame))
+
+      while(_running)
       {
-        //std::cout << "Frame " << i << std::endl;
-        std::stringstream ss;
-        cv::rectangle(frame, cv::Point(10, 2), cv::Point(100, 20), cv::Scalar(255, 255, 255), -1);
-        ss << i;
-        std::string frameNumberString = ss.str();
-        cv::putText(frame, frameNumberString.c_str(), cv::Point(15, 15), CV_FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 0, 0));
+        if(frame1.empty())
+        {
+          if(!_capture.read(frame1))
+          {
+            break;
+          }
+        }
+
+        if(!_capture.read(frame2))
+        {
+          break;
+        }
+
+        cv::absdiff(frame1, frame2, diffFrame);
+        cv::threshold(diffFrame, threshFrame, 80, 255, THRESH_BINARY);
+
+        frame1 = frame2;
 
         if((i++) % 60 == 0)
         {
