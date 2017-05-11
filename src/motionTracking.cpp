@@ -517,6 +517,9 @@ int main(){
 	
 	int counter = 0;
 	long long currTime = 0, prevTime = 0;
+
+	cv::Mat *currentFrame = nullptr, *previousFrame = nullptr;
+
 	while(1){
 		//we can loop the video by re-opening the capture every time the video reaches its last frame
 
@@ -545,19 +548,25 @@ int main(){
 
 		bool first = true;
 
+		currentFrame = &frame1;
+		previousFrame = &frame2;
+
 		while(1){
 		//while (capture.get(CV_CAP_PROP_POS_FRAMES)<capture.get(CV_CAP_PROP_FRAME_COUNT) - 1) {
 
 			//read first frame
-			if (frame1.empty()) {
-				capture.read(frame1);
+			if (frame1.empty())
+			{
+				capture.read(*previousFrame);
 
-				processFrame(frame1,maskImage, iblur);
+				processFrame(previousFrame, maskImage, iblur);
 
 				first = false;
 			}
+			
 			//copy second frame
-			capture.read(frame2);
+			capture.read(*currentFrame);
+			frame2 = &frame2;
 
 			/*processFrame(frame2, maskImage, iblur);
 
@@ -656,6 +665,9 @@ int main(){
 
 			}
 
+			cv::Mat* tmp = frame1;
+			frame2 = frame1;
+			frame1 = tmp;
 			//frame1 = grayImage2.clone();
 
 			if((++counter) % 60 == 0)
