@@ -656,7 +656,7 @@ int main(){
 
 			}
 
-			frame1 = grayImage2.clone();
+			//frame1 = grayImage2.clone();
 
 			if((++counter) % 60 == 0)
 			{
