@@ -328,7 +328,7 @@ struct Setting
 
 std::vector<Setting*> settings;
 
-int main(){
+/*int main(){
 
 	leftRegion.push_back(Point2f(646, 139));
 	leftRegion.push_back(Point2f(755, 139));
@@ -526,4 +526,4 @@ int main(){
 
 	return 0;
 
-}
+}*/

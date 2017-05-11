@@ -27,9 +27,17 @@ void CCam::Start()
     {
       std::cout << "Set framerate" << std::endl;
 
+      cv::namedWindow("frame");
+      cv::Mat frame;
+      while(_capture.read(frame))
+      {
+        cv::imshow("frame", frame);
+        cv::readKey(1);
+      }
+
       //cv::startWindowThread();
 
-      //cv::namedWindow("thresh");
+      /*//cv::namedWindow("thresh");
       std::cout << "Created window" << std::endl;
       _running = true;
 
@@ -125,7 +133,7 @@ void CCam::Start()
         //std::cout << "waitkey2" << std::endl;
       }
 
-
+*/
 
       std::cout << "Stopped reading" << std::endl;
       _running = false;

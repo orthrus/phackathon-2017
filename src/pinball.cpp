@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-/*int main(void)
+int main(void)
 {
     CCam cam;
 
@@ -14,4 +14,4 @@
     std::cin.get();
     return 0;
 }
-*/
+
