@@ -35,7 +35,7 @@ LIBS:=	-lopencv_shape \
 				-ljpeg \
 				-lopenjp2
 
-CFLAGS= -std=c++14 -Wall -static $(INCLUDE_PATH)
+CFLAGS= -std=c++14 -Wall $(INCLUDE_PATH)
 
 
 SOURCES=$(wildcard src/*.cpp)
