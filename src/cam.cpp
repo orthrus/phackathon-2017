@@ -38,7 +38,7 @@ void CCam::Start()
       long long curTime = 0;;
       while (_capture.read(frame))
       {
-        std::cout << "Frame " << i << std::endl;
+        //std::cout << "Frame " << i << std::endl;
         std::stringstream ss;
         cv::rectangle(frame, cv::Point(10, 2), cv::Point(100, 20), cv::Scalar(255, 255, 255), -1);
         ss << i++;
@@ -49,7 +49,7 @@ void CCam::Start()
         {
           struct timespec spec;
           clock_gettime(CLOCK_REALTIME, &spec);
-          curTime - spec.tv_sec * 1000 + round(spec.tv_nsec / 1.0e6);
+          curTime = (spec.tv_sec * 1000) + round(spec.tv_nsec / 1.0e6);
           if(prevTime != 0)
           {
             std::cout << "reading " << i - prevI << " frames took " << curTime - prevTime << "ms" << std::endl;
