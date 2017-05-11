@@ -41,7 +41,7 @@ void CCam::Start()
         //std::cout << "Frame " << i << std::endl;
         std::stringstream ss;
         cv::rectangle(frame, cv::Point(10, 2), cv::Point(100, 20), cv::Scalar(255, 255, 255), -1);
-        ss << i++;
+        ss << i;
         std::string frameNumberString = ss.str();
         cv::putText(frame, frameNumberString.c_str(), cv::Point(15, 15), CV_FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 0, 0));
 
