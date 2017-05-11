@@ -7,8 +7,10 @@ LIBRARY_PATH:=-L/usr/lib \
 							-L/usr/share/lib
 
 
+SHARED_LIBS:= -Bdynamic
 
-LIBS:=	-lopencv_calib3d		\
+STATIC_LIBS:=	-Bstatic			\
+				-lopencv_calib3d		\
 				-lopencv_core				\
 				-lopencv_features2d	\
 				-lopencv_flann			\
@@ -23,7 +25,7 @@ LIBS:=	-lopencv_calib3d		\
 				-lopencv_superres		\
 				-lopencv_video			\
 				-lopencv_videoio		\
-				-lopencv_videostab
+				-lopencv_videostab 	\
 
 
 CFLAGS= -std=c++14 -Wall -static $(INCLUDE_PATH)
@@ -33,7 +35,7 @@ SOURCES=$(wildcard src/*.cpp)
 OBJECTS=$(patsubst %.cpp,%.o, $(SOURCES))
 
 all: ${OBJECTS}
-	${CC} ${CFLAGS} -o pinball ${OBJECTS} ${LIBS}
+	${CC} ${CFLAGS} -o pinball ${OBJECTS} ${STATIC_LIBS} ${SHARED_LIBS}
 
 clean:
 	rm -f src/*.o
