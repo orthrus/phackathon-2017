@@ -567,7 +567,7 @@ int main(){
 			
 			//copy second frame
 			capture.read(*currentFrame);
-			currentFrame = &frame2;
+			//currentFrame = &frame2;
 
 			std::cout << "process current" << std::endl;
 			processFrame(*currentFrame, maskImage, iblur);
