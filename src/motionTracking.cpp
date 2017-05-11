@@ -447,18 +447,16 @@ std::vector<Setting*> settings;
 int main(){
 	ser.init(false);
 	ser.reset();
+
 	triggerFlipBottomLeft.id = 1;
-	triggerFlipBottomLeft.region.push_back(Point2f(680, 218));
 	triggerFlipBottomLeft.region.push_back(Point2f(718, 288));
+	triggerFlipBottomLeft.region.push_back(Point2f(680, 359));
 	triggerFlipBottomLeft.region.push_back(Point2f(647, 288));
 
-
-
 	triggerFlipBottomRight.id = 2;
+	triggerFlipBottomRight.region.push_back(Point2f(680, 218));
 	triggerFlipBottomRight.region.push_back(Point2f(718, 288));
-	triggerFlipBottomRight.region.push_back(Point2f(680, 359));
 	triggerFlipBottomRight.region.push_back(Point2f(647, 288));
-
 
 	triggerFlipTopRight.id = 3;
 	triggerFlipTopRight.region.push_back(Point2f(268, 102));
