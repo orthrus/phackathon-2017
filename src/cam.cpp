@@ -67,6 +67,7 @@ void CCam::Start()
             {
               std::cout << "set diffFrame" << std::endl;
               diffFrame = diffFrameTmp.clone();
+              diffFrame.addref();
               std::cout << "diff empty = " << diffFrame.empty() << std::endl;
             }
             threshFrame = threshFrameTmp.clone();
@@ -104,6 +105,7 @@ void CCam::Start()
           {
             std::cout << "clone diff" << std::endl;
             diff = diffFrame.clone();
+            diffFrame.release();
           }
           if(!threshFrame.empty())
           {
