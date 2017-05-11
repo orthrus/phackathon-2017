@@ -29,10 +29,15 @@ void CCam::Start()
 
       cv::namedWindow("frame");
       cv::Mat frame;
+      bool first = true;
       while(_capture.read(frame))
       {
         cv::imshow("frame", frame);
-        cv::imwrite("/home/pi/baseline.jpg", frame);
+        if(first)
+        {
+          cv::imwrite("/home/pi/baseline.jpg", frame);
+          first = false;
+        }
         cv::waitKey(1);
       }
 
