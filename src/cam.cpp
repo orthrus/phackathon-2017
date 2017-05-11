@@ -63,7 +63,11 @@ void CCam::Start()
 
           {
             std::lock_guard<std::mutex> lock(_mutex);
-            diffFrame = diffFrameTmp.clone();
+            if(!diffFrameTmp.empty())
+            {
+              std::cout << "set diffFrame" << std::endl;
+              diffFrame = diffFrameTmp.clone();
+            }
             threshFrame = threshFrameTmp.clone();
           }
 
