@@ -3,13 +3,13 @@
 //Written by  Kyle Hounslow, January 2014
 
 //Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software")
-//, to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+//, to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
 //and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
 //The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 //THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
 //LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 //IN THE SOFTWARE.
 
@@ -21,11 +21,15 @@
 #include <functional>
 
 #include <opencv2/highgui.hpp>
+#include <windows.h>
 #include <ctime>
 #include "serial.h"
+//#include "Leap.h"
 
 using namespace std;
 using namespace cv;
+
+
 CSerial ser;
 
 //our sensitivity value to be used in the threshold() function
@@ -62,7 +66,7 @@ struct TPosition
 vector<Point2f> leftRegion;
 vector<Point2f> rightRegion;
 
-double latency = 1.0;
+double latency = 1.5;
 
 
 class History
@@ -123,37 +127,166 @@ History* historyPositions;
 History* historyHits;
 
 
-void fillRegion(Mat img, vector<Point2f>& region, Scalar& col)
+void drawRegion(Mat img, vector<Point2f>& region, const Scalar& col)
 {
-	/** Create some points */
-	Point rook_points[1][4];
-	rook_points[0][0] = region[0];
-	rook_points[0][1] = region[1];
-	rook_points[0][2] = region[2];
-	rook_points[0][3] = region[3];
+	if (region.size() < 2) return;
 
+	const Point2f* first = nullptr;
+	const Point2f* current = nullptr;
+	const Point2f* previous = nullptr;
 
-	const Point* ppt[1] = { rook_points[0] };
-	int npt[] = { 4 };
+	for (int i = 0; i < region.size(); i++)
+	{
+		current = &region[i];
 
-	fillPoly(img,
-		ppt,
-		npt,
-		1,
-		col,
-		8);
+		if (first == nullptr) {
+			first = current;
+		}
+
+		if (previous != nullptr) {
+
+			line(img, *previous, *current, col, 5);
+		}
+
+		previous = current;
+	}
+
+	line(img, *previous, *first, col, 5);
 }
 
-void flipLeft()
+void Flip(int id)
 {
-	ser.flipper(CSerial::BOTTOMLEFT, 100);
-	cout << "FLIP LEFT\n";
+	cout << "FLIP " << id << endl;
+
+	switch(id)
+	{
+		case 1:
+			ser.flipper(CSerial::BOTTOMLEFT, 100);
+			break;
+		case 2:
+			ser.flipper(CSerial::BOTTOMRIGHT, 100);
+			break;
+		case 3:
+			ser.flipper(CSerial::TOPRIGHT, 100);
+			break;
+	}
 }
 
-void flipRight()
+
+struct FlipTrigger
 {
-	ser.flipper(CSerial::BOTTOMRIGHT, 100);
-	cout << "FLIP RIGHT\n";
+	int id;
+	vector<Point2f> region;
+};
+
+FlipTrigger triggerFlipBottomLeft;
+FlipTrigger triggerFlipBottomRight;
+FlipTrigger triggerFlipTopRight;
+
+
+
+
+
+Mat* ff;
+
+double cross(Point v1, Point v2) {
+	return v1.x*v2.y - v1.y*v2.x;
+}
+bool getIntersectionPoint(Point a1, Point a2, Point b1, Point b2) {
+	Point p = a1;
+	Point q = b1;
+	Point r(a2 - a1);
+	Point s(b2 - b1);
+
+	if (cross(r, s) == 0) { return false; }
+
+	double t = cross(q - p, s) / cross(r, s);
+
+
+	line(*ff, a1, a2, Scalar(255, 0, 0));
+	line(*ff, b1, b2, Scalar(255, 0, 0));
+
+	return true;
+}
+
+bool pointonline(const Point& p, const Point& l1, const Point& l2)
+{
+	if (l1.x < l2.x)
+	{
+		if (l1.y < l2.y)
+		{
+			return p.x >= l1.x && p.x <= l2.x && p.y >= l1.y && p.y <= l2.y;
+		}
+		else
+		{
+			return p.x >= l1.x && p.x <= l2.x && p.y < l1.y && p.y > l2.y;
+		}
+	}
+	else
+	{
+		if (l1.y < l2.y)
+		{
+			return p.x < l1.x && p.x > l2.x && p.y >= l1.y && p.y <= l2.y;
+		}
+		else
+		{
+			return p.x < l1.x && p.x > l2.x && p.y < l1.y && p.y > l2.y;
+		}
+	}
+}
+
+bool intersection(const Point2f& o1, const Point2f& p1, const Point2f& o2, const Point2f& p2)
+{
+	Point2f x = o2 - o1;
+	Point2f d1 = p1 - o1;
+	Point2f d2 = p2 - o2;
+
+	float cross = d1.x*d2.y - d1.y*d2.x;
+	if (abs(cross) < /*EPS*/1e-8)
+		return false;
+
+	//line(*ff, o1, p1,Scalar(255,0,0));
+	//line(*ff, o2, p2, Scalar(255, 0, 0));
+
+	Point2f r;
+	double t1 = (x.x * d2.y - x.y * d2.x) / cross;
+	r = o1 + d1 * t1;
+
+	bool online =  pointonline(r,o1,p1) && pointonline(r,o2,p2);
+
+	//if (online) circle(*ff, r, 10, Scalar(255, 0, 0));
+
+	return online;
+}
+
+bool testTrigger(const Point& point1, const Point& point2, const FlipTrigger& flipTrigger) {
+
+	if (flipTrigger.region.size() < 2) return false;
+
+	const Point2f* first = nullptr;
+	const Point2f* current = nullptr;
+	const Point2f* previous = nullptr;
+
+	for (int i = 0; i < flipTrigger.region.size(); i++)
+	{
+		current = &flipTrigger.region[i];
+
+		if (first == nullptr) {
+			first = current;
+		}
+
+		if (previous != nullptr) {
+
+			if (intersection(point1, point2, *previous, *current))
+			{ 
+				return true;
+			}
+		}
+
+		previous = current;
+	}
+
+	return intersection(point1, point2, *previous, *first);
 }
 
 void searchForMovement(bool debug, Mat input, Mat &cameraFeed){
@@ -174,6 +307,8 @@ void searchForMovement(bool debug, Mat input, Mat &cameraFeed){
 	if(contours.size()>0)objectDetected=true;
 	else objectDetected = false;
 
+	ff = &cameraFeed;
+
 	if(objectDetected){
 		//the largest contour is found at the end of the contours vector
 		//we will simply assume that the biggest contour is the object we are looking for.
@@ -189,11 +324,11 @@ void searchForMovement(bool debug, Mat input, Mat &cameraFeed){
 		theObject[0] = xpos , theObject[1] = ypos;
 	}
 	//make some temp x and y variables so we dont have to type out so much
-
+	
 	int x = theObject[0];
 	int y = theObject[1];
 	//draw some crosshairs on the object
-
+	
 	if (objectDetected) {
 		if (debug) {
 			circle(cameraFeed, Point(x, y), 20, Scalar(0, 255, 0), 2);
@@ -213,7 +348,7 @@ void searchForMovement(bool debug, Mat input, Mat &cameraFeed){
 
 	Point previous;
 	historyPositions->Do(!debug,[debug, &previous,&cameraFeed](int x, int y, bool valid, bool last) {
-
+		
 		if (debug) {
 			if (previous.x != 0 || previous.y != 0) {
 				line(cameraFeed, previous, Point(x, y), Scalar(0, 255, 0), 2);
@@ -227,55 +362,32 @@ void searchForMovement(bool debug, Mat input, Mat &cameraFeed){
 			int nx = x - (int)(dx*latency);
 			int ny = y - (int)(dy*latency);
 
+			Point prediction(nx, ny);
+			Point current(x, y);
+
 			if (debug)
 			{
-				line(cameraFeed, Point(nx, ny), Point(x, y), Scalar(255, 0, 0), 2);
+				line(cameraFeed, prediction, current, Scalar(255, 0, 0), 2);
 			}
 
-			bool left = (pointPolygonTest(leftRegion, Point2f(nx, ny), false) >= 0.0) || (pointPolygonTest(leftRegion, Point2f(x, y), false) >= 0.0);
-			bool right = (pointPolygonTest(rightRegion, Point2f(nx, ny), false) >= 0.0) || (pointPolygonTest(rightRegion, Point2f(x, y), false) >= 0.0);
-
-			if (!left && !right && nx != 0 && ny != 0 && dx != 0)
-			{
-
-				double a = dy / (double)dx;
-				double b = ny - (a*nx);
-
-				int flipx = (leftRegion[0].y - b) / a;
-
-
-				if (ny < leftRegion[0].y)
-				{
-					if (flipx < rightRegion[0].x)
-					{
-						left = true;
-					}
-					else
-					{
-						right = true;
-					}
-				}
-			}
-
-			if (debug) {
-				if (left) {
-					auto sc = Scalar(255, 0, 255);
-					fillRegion(cameraFeed, leftRegion, sc);
-				}
-
-				if (right) {
-					auto sc = Scalar(255, 0, 255);
-					fillRegion(cameraFeed, rightRegion, sc);
-				}
-			}
-
-			if (left || right)
-			{
+			if (testTrigger(current, prediction, triggerFlipBottomLeft)) {
+				Flip(triggerFlipBottomLeft.id);
 				historyHits->Set(x, y);
+				if (debug) drawRegion(cameraFeed, triggerFlipBottomLeft.region, Scalar(255, 0, 255));
 			}
 
-			if (left) flipLeft();
-			if (right) flipRight();
+			if (testTrigger(current, prediction, triggerFlipBottomRight)) {
+				Flip(triggerFlipBottomRight.id);
+				historyHits->Set(x, y);
+				if (debug) drawRegion(cameraFeed, triggerFlipBottomRight.region, Scalar(255, 0, 255));
+			}
+
+			if (testTrigger(current, prediction, triggerFlipTopRight)) {
+				Flip(triggerFlipTopRight.id);
+				historyHits->Set(x, y);
+				if (debug) drawRegion(cameraFeed, triggerFlipTopRight.region, Scalar(255, 0, 255));
+			}			
+
 		}
 
 		if (debug && valid) circle(cameraFeed, Point(x, y), 5, Scalar(0, 0, 255), 2);
@@ -284,7 +396,7 @@ void searchForMovement(bool debug, Mat input, Mat &cameraFeed){
 			previous.x = x;
 			previous.y = y;
 		}
-
+	
 	});
 
 	if (debug) {
@@ -332,22 +444,26 @@ struct Setting
 
 std::vector<Setting*> settings;
 
-int main()
-{
+int main(){
 	ser.init(false);
 	ser.reset();
+	triggerFlipBottomLeft.id = 1;
+	triggerFlipBottomLeft.region.push_back(Point2f(680, 218));
+	triggerFlipBottomLeft.region.push_back(Point2f(718, 288));
+	triggerFlipBottomLeft.region.push_back(Point2f(647, 288));
 
-	leftRegion.push_back(Point2f(646, 139));
-	leftRegion.push_back(Point2f(755, 139));
-	leftRegion.push_back(Point2f(755, 160));
-	leftRegion.push_back(Point2f(730, 160));
 
 
-	rightRegion.push_back(Point2f(756, 139));
-	rightRegion.push_back(Point2f(866, 139));
-	rightRegion.push_back(Point2f(777, 160));
-	rightRegion.push_back(Point2f(756, 160));
+	triggerFlipBottomRight.id = 2;
+	triggerFlipBottomRight.region.push_back(Point2f(718, 288));
+	triggerFlipBottomRight.region.push_back(Point2f(680, 359));
+	triggerFlipBottomRight.region.push_back(Point2f(647, 288));
 
+
+	triggerFlipTopRight.id = 3;
+	triggerFlipTopRight.region.push_back(Point2f(268, 102));
+	triggerFlipTopRight.region.push_back(Point2f(327, 125));
+	triggerFlipTopRight.region.push_back(Point2f(286, 169));
 
 	historyPositions = new History(HIS_SIZE);
 	historyHits = new History(HIST_SIZE);
@@ -369,18 +485,17 @@ int main()
 	//thresholded difference image (for use in findContours() function)
 	Mat thresholdImage;
 	//video capture object.
-	//VideoCapture capture;// (CV_CAP_DSHOW + 0);
-	//VideoCapture vcap( 0);
+	VideoCapture capture;// (CV_CAP_DSHOW + 0);
+	//VideoCapture vcap( 0); 
 
-	VideoCapture capture(0); // open the default camera
-	if (!capture.isOpened())  // check if we succeeded
-		return -1;
+	//VideoCapture capture(0); // open the default camera
+	//if (!capture.isOpened())  // check if we succeeded
+	//	return -1;
 
-	capture.set(CV_CAP_PROP_FRAME_WIDTH, 720);
-	capture.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
-	capture.set(CV_CAP_PROP_FPS, 60);
+	capture.set(CV_CAP_PROP_FRAME_HEIGHT, 720);
+	capture.set(CV_CAP_PROP_FRAME_WIDTH, 1280);
 
-	bool fromFile = false;
+	bool fromFile = true;
 
 
 	int iblur = BLUR_SIZE/2;
@@ -406,8 +521,13 @@ int main()
 		//we add '-1' because we are reading two frames from the video at a time.
 		//if this is not included, we get a memory error!
 
-
-		cv::Mat maskImage = cv::imread("mask2.jpg");
+		
+		cv::Mat maskImage = cv::imread("mask.jpg");
+		
+		if (!maskImage.data) {
+			capture.read(frame2);
+			imwrite("masktemplate.jpg", frame2);
+		}
 
 		bool first = true;
 
@@ -443,7 +563,7 @@ int main()
 			if (trackingEnabled) {
 
 				searchForMovement(debugMode, output,frame2);
-
+				
 				if (debugMode)
 				{
 					imshow("debug", frame2);
@@ -456,14 +576,14 @@ int main()
 			}
 			else {
 				//show our captured frame
-
+				
 
 			}
 			//check to see if a button has been pressed.
 			//this 10ms delay is necessary for proper operation of this program
-			//if removed, frames will not have enough time to referesh and a blank
+			//if removed, frames will not have enough time to referesh and a blank 
 			//image will appear.
-			switch(waitKey(debugMode?1:1)){
+			switch(waitKey(debugMode?100:0)){
 
 			case 27: //'esc' key has been pressed, exit program.
 				return 0;
@@ -505,10 +625,10 @@ int main()
 				pause = !pause;
 				if(pause == true){ cout<<"Code paused, press 'p' again to resume"<<endl;
 				while (pause == true){
-					//stay in this loop until
+					//stay in this loop until 
 					switch (waitKey()){
 						//a switch statement inside a switch statement? Mind blown.
-					case 112:
+					case 112: 
 						//change pause back to false
 						pause = false;
 						cout<<"Code resumed."<<endl;
@@ -520,9 +640,9 @@ int main()
 
 			}
 
-			frame1 = grayImage2.clone();
+			frame1 = grayImage2.clone();			
 		}
-
+		 
 		//release the capture before re-opening and looping again.
 		capture.release();
 	}
@@ -533,4 +653,5 @@ int main()
 
 	ser.exit();
 	return 0;
+
 }
