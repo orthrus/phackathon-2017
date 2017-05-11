@@ -456,7 +456,7 @@ int main(){
 			//this 10ms delay is necessary for proper operation of this program
 			//if removed, frames will not have enough time to referesh and a blank
 			//image will appear.
-			switch(waitKey(debugMode?1:0)){
+			switch(waitKey(debugMode?1:1)){
 
 			case 27: //'esc' key has been pressed, exit program.
 				return 0;
