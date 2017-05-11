@@ -43,7 +43,7 @@ void CCam::Start()
       cv::Mat frame1;
 
       std::thread t = std::thread([=]() mutable {
-        
+
         while(_running)
         {
           cv::Mat frame2, diffFrameTmp, threshFrameTmp;
@@ -69,7 +69,7 @@ void CCam::Start()
             {
               diffFrame = diffFrameTmp.clone();
             }
-            if(!threshFrameTmp.clone())
+            if(!threshFrameTmp.empty())
             {
               threshFrame = threshFrameTmp.clone();
             }
