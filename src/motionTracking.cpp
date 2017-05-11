@@ -40,7 +40,7 @@ CSerial ser;
 const static int SENSITIVITY_VALUE = 60;
 //size of blur used to smooth the image to remove possible noise and
 //increase the size of the object we are trying to track. (Much like dilate and erode)
-const static int BLUR_SIZE = 15;
+const static int BLUR_SIZE = 1;
 //we'll have just one object to search for
 //and keep track of its position.
 int theObject[2] = {0,0};
@@ -413,13 +413,15 @@ void searchForMovement(bool debug, const Mat& input, Mat &cameraFeed){
 
 void processFrame(Mat &capture, Mat& mask, int blur)
 {
-	if (mask.data) {
+	/*if (mask.data) {
 		cv::bitwise_and(capture, mask, capture);
-	}
+	}*/
+
 	cv::cvtColor(capture, capture, COLOR_BGR2GRAY);
-	if (blur > 0) {
+	
+	/*if (blur > 0) {
 		cv::blur(capture, capture, cvSize(blur, blur));
-	}
+	}*/
 }
 
 struct Setting
@@ -575,7 +577,7 @@ int main(){
 			//perform frame differencing with the sequential images. This will output an "intensity image"
 			//do not confuse this with a threshold image, we will need to perform thresholding afterwards.
 			//std::cout << "diff" << std::endl;
-			cv::absdiff(*previousFrame, *currentFrame, differenceImage);
+			cv::absdiff(*c, *currentFrame, differenceImage);
 			//threshold intensity image at a given sensitivity value
 			
 			//std::cout << "threshold1" << std::endl;
@@ -598,9 +600,13 @@ int main(){
 				if (debugMode)
 				{
 					imshow("debug", thresholdImage);
+					imshow("currentFrame",*currentFrame);
+					imshow("previousFrame",*previousFrame);
 				}
 				else
 				{
+					cv::destroyWindow("currentFrame");
+					cv::destroyWindow("previousFrame");
 					cv::destroyWindow("debug");
 				}
 
@@ -610,6 +616,9 @@ int main(){
 				
 
 			}
+
+			
+
 			//check to see if a button has been pressed.
 			//this 10ms delay is necessary for proper operation of this program
 			//if removed, frames will not have enough time to referesh and a blank 
@@ -672,6 +681,8 @@ int main(){
 
 
 			}
+
+
 
 			cv::Mat* tmp = currentFrame;
 			currentFrame = previousFrame;
