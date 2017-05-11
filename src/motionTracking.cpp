@@ -24,6 +24,7 @@
 
 #include <ctime>
 #include "serial.h"
+#include <time.h>
 //#include "Leap.h"
 
 using namespace std;
@@ -444,6 +445,13 @@ struct Setting
 
 std::vector<Setting*> settings;
 
+long long getTimeMs()
+{
+	struct timespec spec;
+	clock_gettime(CLOCK_REALTIME, &spec);
+    return (spec.tv_sec * 1000) + round(spec.tv_nsec / 1.0e6);
+}
+
 int main(){
 	ser.init(false);
 	ser.reset();
@@ -501,8 +509,10 @@ int main(){
 	int isens = SENSITIVITY_VALUE;
 	int iblur2 = BLUR_SIZE;
 	int isens2 = SENSITIVITY_VALUE;
+	
+	int count = 0;
+	long long currTime = 0, prevTime = 0;
 	while(1){
-
 		//we can loop the video by re-opening the capture every time the video reaches its last frame
 
 		if (fromFile) {
@@ -639,7 +649,18 @@ int main(){
 
 			}
 
-			frame1 = grayImage2.clone();			
+			frame1 = grayImage2.clone();
+
+			if(counter++ % 60 == 0)
+			{
+				currTime = getTimeMs();
+				if(prevTime != 0)
+				{
+					std::cout << "reading " << counter << " frames took " << currTime - prevTime << "ms" << std::endl;
+				}
+				prevTime = curTime;
+				counter = 0;
+			}
 		}
 		 
 		//release the capture before re-opening and looping again.
