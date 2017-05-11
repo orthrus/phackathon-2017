@@ -3,27 +3,25 @@
 //Written by  Kyle Hounslow, January 2014
 
 //Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software")
-//, to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+//, to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
 //and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
 //The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 //THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+//FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 //LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 //IN THE SOFTWARE.
 
 #include <iostream>
-#include <opencv2\calib3d.hpp>
-#include <opencv2\imgproc.hpp>
-#include <opencv2\videoio.hpp>
-#include <opencv\cv.h>
+#include <opencv2/calib3d.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/videoio.hpp>
+#include <opencv/cv.h>
 #include <functional>
 
-#include <opencv2\highgui.hpp>
-#include <windows.h>
+#include <opencv2/highgui.hpp>
 #include <ctime>
-#include "Leap.h"
 
 using namespace std;
 using namespace cv;
@@ -188,11 +186,11 @@ void searchForMovement(bool debug, Mat input, Mat &cameraFeed){
 		theObject[0] = xpos , theObject[1] = ypos;
 	}
 	//make some temp x and y variables so we dont have to type out so much
-	
+
 	int x = theObject[0];
 	int y = theObject[1];
 	//draw some crosshairs on the object
-	
+
 	if (objectDetected) {
 		if (debug) {
 			circle(cameraFeed, Point(x, y), 20, Scalar(0, 255, 0), 2);
@@ -212,7 +210,7 @@ void searchForMovement(bool debug, Mat input, Mat &cameraFeed){
 
 	Point previous;
 	historyPositions->Do(!debug,[debug, &previous,&cameraFeed](int x, int y, bool valid, bool last) {
-		
+
 		if (debug) {
 			if (previous.x != 0 || previous.y != 0) {
 				line(cameraFeed, previous, Point(x, y), Scalar(0, 255, 0), 2);
@@ -281,7 +279,7 @@ void searchForMovement(bool debug, Mat input, Mat &cameraFeed){
 			previous.x = x;
 			previous.y = y;
 		}
-	
+
 	});
 
 	if (debug) {
@@ -364,7 +362,7 @@ int main(){
 	Mat thresholdImage;
 	//video capture object.
 	//VideoCapture capture;// (CV_CAP_DSHOW + 0);
-	//VideoCapture vcap( 0); 
+	//VideoCapture vcap( 0);
 
 	VideoCapture capture(0); // open the default camera
 	if (!capture.isOpened())  // check if we succeeded
@@ -399,9 +397,9 @@ int main(){
 		//we add '-1' because we are reading two frames from the video at a time.
 		//if this is not included, we get a memory error!
 
-		
+
 		cv::Mat maskImage = cv::imread("mask2.jpg");
-		
+
 		bool first = true;
 
 		while(1){
@@ -436,7 +434,7 @@ int main(){
 			if (trackingEnabled) {
 
 				searchForMovement(debugMode, output,frame2);
-				
+
 				if (debugMode)
 				{
 					imshow("debug", frame2);
@@ -449,12 +447,12 @@ int main(){
 			}
 			else {
 				//show our captured frame
-				
+
 
 			}
 			//check to see if a button has been pressed.
 			//this 10ms delay is necessary for proper operation of this program
-			//if removed, frames will not have enough time to referesh and a blank 
+			//if removed, frames will not have enough time to referesh and a blank
 			//image will appear.
 			switch(waitKey(debugMode?1:0)){
 
@@ -498,10 +496,10 @@ int main(){
 				pause = !pause;
 				if(pause == true){ cout<<"Code paused, press 'p' again to resume"<<endl;
 				while (pause == true){
-					//stay in this loop until 
+					//stay in this loop until
 					switch (waitKey()){
 						//a switch statement inside a switch statement? Mind blown.
-					case 112: 
+					case 112:
 						//change pause back to false
 						pause = false;
 						cout<<"Code resumed."<<endl;
@@ -513,9 +511,9 @@ int main(){
 
 			}
 
-			frame1 = grayImage2.clone();			
+			frame1 = grayImage2.clone();
 		}
-		 
+
 		//release the capture before re-opening and looping again.
 		capture.release();
 	}
