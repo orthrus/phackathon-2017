@@ -37,14 +37,16 @@ void CCam::Start()
 
       cv::Mat diffFrame, threshFrame;
 
-      cv::Mat frame1, frame2, diffFrameTmp, threshFrameTmp;
+
       long long prevTime = 0;
       long long curTime = 0;
 
       std::thread t = std::thread([=]() mutable {
-
+        cv::Mat frame1;
+        
         while(_running)
         {
+          cv::Mat frame2, diffFrameTmp, threshFrameTmp;
           if(frame1.empty())
           {
             if(!_capture.read(frame1))
@@ -59,7 +61,7 @@ void CCam::Start()
           }
 
           cv::absdiff(frame1, frame2, diffFrameTmp);
-          cv::threshold(diffFrame, threshFrameTmp, 80, 255, cv::THRESH_BINARY);
+          cv::threshold(diffFrameTmp, threshFrameTmp, 80, 255, cv::THRESH_BINARY);
 
           {
             std::lock_guard<std::mutex> lock(_mutex);
@@ -67,8 +69,6 @@ void CCam::Start()
             {
               std::cout << "set diffFrame" << std::endl;
               diffFrame = diffFrameTmp.clone();
-              diffFrame.addref();
-              std::cout << "diff empty = " << diffFrame.empty() << std::endl;
             }
             threshFrame = threshFrameTmp.clone();
           }
@@ -94,18 +94,16 @@ void CCam::Start()
 
       cv::namedWindow("diff");
 
-      cv::Mat diff;
-      cv::Mat thresh;
-
       while(_running)
       {
+        cv::Mat diff;
+        cv::Mat thresh;
         {
           std::lock_guard<std::mutex> lock(_mutex);
           if(!diffFrame.empty())
           {
             std::cout << "clone diff" << std::endl;
             diff = diffFrame.clone();
-            diffFrame.release();
           }
           if(!threshFrame.empty())
           {
