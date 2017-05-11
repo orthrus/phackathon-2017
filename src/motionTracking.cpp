@@ -510,7 +510,7 @@ int main(){
 	int iblur2 = BLUR_SIZE;
 	int isens2 = SENSITIVITY_VALUE;
 	
-	int count = 0;
+	int counter = 0;
 	long long currTime = 0, prevTime = 0;
 	while(1){
 		//we can loop the video by re-opening the capture every time the video reaches its last frame
