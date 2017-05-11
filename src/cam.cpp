@@ -57,7 +57,7 @@ void CCam::Start()
         }
 
         cv::absdiff(frame1, frame2, diffFrame);
-        cv::threshold(diffFrame, threshFrame, 80, 255, THRESH_BINARY);
+        cv::threshold(diffFrame, threshFrame, 80, 255, cv::THRESH_BINARY);
 
         frame1 = frame2;
 
