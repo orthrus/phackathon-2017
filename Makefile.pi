@@ -25,7 +25,13 @@ LIBS:=	-lopencv_shape \
 				-lopencv_flann \
 				-lopencv_core \
 				-lpthread \
-				-ljpeg
+				-ljpeg \
+				-lavformat \
+				-lavcodec \
+				-lswscale \
+				-lavutil \
+				-lavdevice \
+				-lz
 
 CFLAGS= -std=c++14 -Wall -static $(INCLUDE_PATH)
 
