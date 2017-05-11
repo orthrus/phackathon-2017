@@ -73,26 +73,26 @@ void *CSerial::doAsyncFlipper( void *ptr )
 	char cStatus = 0;
 	switch (((TParam*)ptr)->eWhat)
 	{
-		case START:
+		case BOTTOMRIGHT:
 		cStatus = 0x01;
 		break;
-		case BOTTOMLEFT:
-		cStatus = 0x02;
+		case TOPRIGHT:
+		cStatus = 0x01 | 0x02;
 		break;
-		case BOTTOMRIGHT:
+		case BOTTOMLEFT:
 		cStatus = 0x04;
 		break;
-		case TOPRIGHT:
+		case SHIFTUP:
 		cStatus = 0x08;
 		break;
-		case SHIFTUP:
+		case START:
 		cStatus = 0x10;
 		break;
 		case SHIFTDOWN:
 		cStatus = 0x20;
 		break;
 		default:
-		cStatus = 0x00;
+		cStatus = 0x40;
 		break;
 }
 	((TParam*)ptr)->pCerial->setSingleRelais(true, cStatus);

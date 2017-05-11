@@ -15,12 +15,12 @@ public:
 
 	enum EWHAT
 	{
-		START,
-		BOTTOMLEFT,
-		BOTTOMRIGHT,
-		TOPRIGHT,
-		SHIFTUP,
-		SHIFTDOWN
+		BOTTOMRIGHT = 0,
+		TOPRIGHT = 1,
+		BOTTOMLEFT = 2,
+		SHIFTUP = 3,
+		SHIFTDOWN = 4,
+		START
 	};
 
 	void init(bool bResult = false);
