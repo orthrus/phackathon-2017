@@ -81,16 +81,9 @@ int main(int argc, char *argv[])
     for(;;) //Show the image captured in the window and repeat
     {
         inputVideo >> src;              // read
-        if (src.empty()) break;         // check if at end
-
-        split(src, spl);                // process - extract only the correct channel
-        for (int i =0; i < 3; ++i)
-            if (i != channel)
-                spl[i] = Mat::zeros(S, spl[0].type());
-       merge(spl, res);
-
-       //outputVideo.write(res); //save or
-       outputVideo << res;
+        if (src.empty())
+          break;         // check if at end
+        outputVideo << src;
     }
 
     cout << "Finished writing" << endl;
