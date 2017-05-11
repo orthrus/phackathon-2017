@@ -33,7 +33,7 @@ void CSerial::init(bool bResult )
 	m_bResult = bResult;
 
 	pthread_t thread1;
-	pthread_create( &thread1, NULL, doAsyncRead, pParam);
+	pthread_create( &thread1, NULL, doAsyncRead, this);
 }
 void CSerial::exit()
 {
