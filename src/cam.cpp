@@ -27,7 +27,8 @@ void CCam::Start()
       std::cout << "Set framerate" << std::endl;
 
       //cv::startWindowThread();
-      cv::namedWindow("frame");
+      cv::namedWindow("diff");
+      cv::namedWindow("thresh");
       std::cout << "Created window" << std::endl;
       _running = true;
 
@@ -73,6 +74,10 @@ void CCam::Start()
           prevTime = curTime;
           prevI = i;
         }
+
+        cv::imgshow("diff", diffFrame);
+        cv::imgshow("thresh", threshFrame);
+        cv::waitKey(1);
       }
 
       std::cout << "Stopped reading" << std::endl;
