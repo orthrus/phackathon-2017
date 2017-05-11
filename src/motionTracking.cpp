@@ -37,7 +37,7 @@ CSerial ser;
 #endif
 
 //our sensitivity value to be used in the threshold() function
-const static int SENSITIVITY_VALUE = 60;
+const static int SENSITIVITY_VALUE = 80;
 //size of blur used to smooth the image to remove possible noise and
 //increase the size of the object we are trying to track. (Much like dilate and erode)
 const static int BLUR_SIZE = 1;
@@ -411,17 +411,17 @@ void searchForMovement(bool debug, const Mat& input, Mat &cameraFeed){
 
 }
 
-void processFrame(Mat &capture, Mat& mask, int blur)
+void processFrame(Mat &capture, Mat& mask, int blur, bool shouldMask)
 {
-	/*if (mask.data) {
+	if (shouldMask && mask.data) {
 		cv::bitwise_and(capture, mask, capture);
-	}*/
+	}
 
 	cv::cvtColor(capture, capture, COLOR_BGR2GRAY);
 	
-	/*if (blur > 0) {
+	if (blur > 0) {
 		cv::blur(capture, capture, cvSize(blur, blur));
-	}*/
+	}
 }
 
 struct Setting
@@ -463,20 +463,22 @@ int main(){
 	ser.reset();
 	#endif
 
+	bool shouldMask = true;
+
 	triggerFlipBottomLeft.id = 1;
-	triggerFlipBottomLeft.region.push_back(Point2f(718, 288));
-	triggerFlipBottomLeft.region.push_back(Point2f(680, 359));
-	triggerFlipBottomLeft.region.push_back(Point2f(647, 288));
+	triggerFlipBottomLeft.region.push_back(Point2f(432, 192));
+	triggerFlipBottomLeft.region.push_back(Point2f(479, 192));
+	triggerFlipBottomLeft.region.push_back(Point2f(441, 245));
 
 	triggerFlipBottomRight.id = 2;
-	triggerFlipBottomRight.region.push_back(Point2f(680, 218));
-	triggerFlipBottomRight.region.push_back(Point2f(718, 288));
-	triggerFlipBottomRight.region.push_back(Point2f(647, 288));
+	triggerFlipBottomRight.region.push_back(Point2f(441, 132));
+	triggerFlipBottomRight.region.push_back(Point2f(432,192));
+	triggerFlipBottomRight.region.push_back(Point2f(479, 192));
 
 	triggerFlipTopRight.id = 3;
-	triggerFlipTopRight.region.push_back(Point2f(268, 102));
-	triggerFlipTopRight.region.push_back(Point2f(327, 125));
-	triggerFlipTopRight.region.push_back(Point2f(286, 169));
+	triggerFlipTopRight.region.push_back(Point2f(174, 69));
+	triggerFlipTopRight.region.push_back(Point2f(193, 112));
+	triggerFlipTopRight.region.push_back(Point2f(226, 85));
 
 	historyPositions = new History(HIS_SIZE);
 	historyHits = new History(HIST_SIZE);
@@ -562,7 +564,7 @@ int main(){
 				capture.read(*previousFrame);
 
 				//std::cout << "process previous" << std::endl;
-				processFrame(*previousFrame, maskImage, iblur);
+				processFrame(*previousFrame, maskImage, iblur,shouldMask);
 
 				first = false;
 			}
@@ -572,7 +574,7 @@ int main(){
 			//currentFrame = &frame2;
 
 			//std::cout << "process current" << std::endl;
-			processFrame(*currentFrame, maskImage, iblur);
+			processFrame(*currentFrame, maskImage, iblur,shouldMask);
 
 			//perform frame differencing with the sequential images. This will output an "intensity image"
 			//do not confuse this with a threshold image, we will need to perform thresholding afterwards.
@@ -660,6 +662,8 @@ int main(){
 			case 'a':
 				isens2--;
 				break;
+			case 'M': shouldMask = true; break;
+			case 'm': shouldMask = false; break;
 			case 'A':
 				isens2++;
 				break;
