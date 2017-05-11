@@ -23,7 +23,9 @@ LIBS:=	-lopencv_shape \
 				-lopencv_ml \
 				-lopencv_imgproc \
 				-lopencv_flann \
-				-lopencv_core
+				-lopencv_core \
+				-lpthread \
+				-ljpeg
 
 CFLAGS= -std=c++14 -Wall -static $(INCLUDE_PATH)
 
