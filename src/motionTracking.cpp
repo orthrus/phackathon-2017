@@ -369,8 +369,9 @@ int main(){
 	if (!capture.isOpened())  // check if we succeeded
 		return -1;
 
-	capture.set(CV_CAP_PROP_FRAME_HEIGHT, 720);
-	capture.set(CV_CAP_PROP_FRAME_WIDTH, 1280);
+	capture.set(CV_CAP_PROP_FRAME_WIDTH, 720);
+	capture.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
+	capture.set(CV_CAP_PROP_FPS, 60);
 
 	bool fromFile = false;
 
