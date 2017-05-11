@@ -38,6 +38,7 @@ void CCam::Start()
       long long curTime = 0;;
       while (_capture.read(frame))
       {
+        std::cout << "Frame " << i << std::endl
         std::stringstream ss;
         cv::rectangle(frame, cv::Point(10, 2), cv::Point(100, 20), cv::Scalar(255, 255, 255), -1);
         ss << i++;
