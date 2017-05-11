@@ -1,38 +1,14 @@
 CC=g++
 
-#LIBS:= 		-lopencv_core				\
-			-lopencv_videoio		\
-			-lopencv_highgui		\
-
-#				-lopencv_calib3d		\
-				-lopencv_features2d	\
-				-lopencv_flann			\
-				-lopencv_imgproc		\
-				-lopencv_ml					\
-				-lopencv_objdetect	\
-				-lopencv_photo			\
-				-lopencv_stitching	\
-				-lopencv_superres		\
-				-lopencv_video			\
-				-lopencv_videostab 	\
-				-lopencv_shape			\
-				-lopencv_imgcodecs
-
-#				-lopencv_contrib		\
-				-lopencv_legacy			\
-				-lopencv_ocl				\
-				-lopencv_ts
-
-
-OPENCV_INCLUDES:=`pkg-config --cflags opencv`
-OPENCV_LIBS:=`pkg-config --libs opencv`
-
 INCLUDE_PATH:=-I/usr/include \
-							${OPENCV_INCLUDES}
+							-I/usr/local/include/opencv \
+							-I/usr/local/include
 
 LIBRARY_PATH:=-L/usr/lib \
 							-L/usr/lib/arm-linux-gnueabihf \
-							${OPENCV_LIBS}
+							-L/usr/local/lib
+
+LIBS:= -lopencv_shape -lopencv_stitching -lopencv_objdetect -lopencv_superres -lopencv_videostab -lopencv_calib3d -lopencv_features2d -lopencv_highgui -lopencv_videoio -lopencv_imgcodecs -lopencv_video -lopencv_photo -lopencv_ml -lopencv_imgproc -lopencv_flann -lopencv_core
 
 $(info OPENCV_INCLUDES = $(OPENCV_INCLUDES))
 $(info OPENCV_LIBS = $(OPENCV_LIBS))
