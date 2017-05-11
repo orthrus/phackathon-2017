@@ -28,7 +28,7 @@ void CCam::Start()
 
       //cv::startWindowThread();
       cv::namedWindow("diff");
-      cv::namedWindow("thresh");
+      //cv::namedWindow("thresh");
       std::cout << "Created window" << std::endl;
       _running = true;
 
@@ -57,7 +57,7 @@ void CCam::Start()
           break;
         }
 
-        //cv::absdiff(frame1, frame2, diffFrame);
+        cv::absdiff(frame1, frame2, diffFrame);
         //cv::threshold(diffFrame, threshFrame, 80, 255, cv::THRESH_BINARY);
 
         frame1 = frame2;
