@@ -19,7 +19,7 @@ void CCam::Start()
     std::cout << "Camera opened" << std::endl;
 
     _capture.set(CV_CAP_PROP_FRAME_WIDTH, 1280);
-    _capture.set(CV_CAP_PROP_FRAME_HEIGHT, 7200);
+    _capture.set(CV_CAP_PROP_FRAME_HEIGHT, 720);
     if(_capture.set(CV_CAP_PROP_FPS, 60))
     {
       std::cout << "Set framerate" << std::endl;
@@ -30,7 +30,6 @@ void CCam::Start()
       cv::Mat frame;
       while(_capture.read(frame))
       {
-        std::cout << "read frame" << std::endl;
         cv::imshow("frame", frame);
         cv::waitKey(1);
       }
