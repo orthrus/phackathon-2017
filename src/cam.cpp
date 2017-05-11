@@ -60,7 +60,7 @@ void CCam::Start()
         cv::absdiff(frame1, frame2, diffFrame);
         //cv::threshold(diffFrame, threshFrame, 80, 255, cv::THRESH_BINARY);
 
-        frame1 = frame2;
+        frame1 = frame2.clone();
 
         if((i++) % 60 == 0)
         {
