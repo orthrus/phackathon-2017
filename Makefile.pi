@@ -1,10 +1,9 @@
 CC=g++
 
 INCLUDE_PATH:=-I/usr/include \
-							-I/usr/local/include
 
 LIBRARY_PATH:=-L/usr/lib \
-							-L/usr/share/lib
+							-L/usr/lib/arm-linux-gnueabihf
 
 #SHARED_LIBS:= -Bdynamic
 
