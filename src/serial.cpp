@@ -3,7 +3,7 @@
 
  */
 
-#include "Serial.h"
+#include "serial.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
