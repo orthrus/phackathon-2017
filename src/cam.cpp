@@ -2,6 +2,7 @@
 #include "cam.h"
 #include <iostream>
 #include <thread>
+#include <time>
 
 CCam::CCam()
 {
@@ -30,8 +31,11 @@ void CCam::Start()
       std::cout << "Created window" << std::endl;
       _running = true;
 
-      int i = 0;
+      int i = 0, prevI = 0;
       cv::Mat frame;
+
+      long long prevTime = 0;
+      long long curTime = 0;;
       while (_capture.read(frame))
       {
         std::stringstream ss;
@@ -40,8 +44,18 @@ void CCam::Start()
         std::string frameNumberString = ss.str();
         cv::putText(frame, frameNumberString.c_str(), cv::Point(15, 15), CV_FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 0, 0));
 
-        //cv::imshow("frame", frame);
-        //cv::waitKey(1);
+        if(i++ % 60 == 0)
+        {
+          struct timespec spec;
+          clock_gettime(CLOCK_REALTIME, &spec);
+          curTime - spec.tv_sec * 1000 + round(spec.tv_nsec / 1.0e6);
+          if(prevTime != 0)
+          {
+            std::cout << "reading " << i - prevI << " frames took " << curTime - prevTime << "ms" << std::endl;
+          }
+          prevTime = curTime;
+          prevI = i;
+        }
       }
 
       std::cout << "Stopped reading" << std::endl;
