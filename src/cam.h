@@ -6,7 +6,7 @@
 #include <opencv2/videoio.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/video.hpp>
-
+#include <mutex>
 
 class CCam
 {
@@ -17,6 +17,7 @@ public:
   void Start();
 
 private:
+  std::mutex _mutex;
   bool _running;
   cv::VideoCapture _capture;
 };

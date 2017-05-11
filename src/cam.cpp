@@ -3,6 +3,7 @@
 #include <iostream>
 #include <thread>
 #include <time.h>
+#include <mutex>
 
 CCam::CCam()
 {
@@ -36,11 +37,34 @@ void CCam::Start()
       cv::Mat frame1;
       cv::Mat frame2;
 
-      cv::Mat diffFrame;
-      cv::Mat threshFrame;
+      cv::Mat diffFrame, diffFrameTmp;
+      cv::Mat threshFrame, threshFrameTmp;
 
       long long prevTime = 0;
-      long long curTime = 0;;
+      long long curTime = 0;
+
+      std::thread t = std::thread([=]() {
+        cv::Mat diff;
+        cv::Mat thresh;
+
+        while(_running)
+        {
+          {
+            std::lock_guard<std::mutex> lock(_mutex);
+            if(!diffFrame.empty())
+              diff = diffFrame.clone();
+            if(!threshFrame.empty())
+              thresh = threshFrame.clone();
+          }
+
+          if(!diff.empty())
+          {
+            cv::imshow("diff", diff);
+          }
+          cv::waitKey(1);
+        }
+
+      });
 
       while(_running)
       {
@@ -57,8 +81,8 @@ void CCam::Start()
           break;
         }
 
-        cv::absdiff(frame1, frame2, diffFrame);
-        cv::threshold(diffFrame, threshFrame, 80, 255, cv::THRESH_BINARY);
+        cv::absdiff(frame1, frame2, diffFrameTmp);
+        cv::threshold(diffFrame, threshFrameTmp, 80, 255, cv::THRESH_BINARY);
 
         frame1 = frame2.clone();
 
@@ -75,15 +99,11 @@ void CCam::Start()
           prevI = i;
         }
 
-        if(!diffFrame.empty())
         {
-          cv::imshow("diff", diffFrame);
+          std::lock_guard<std::mutex> lock(_mutex);
+          diffFrame = diffFrameTmp.clone();
+          threshFrame = threshFrameTmp.clone();
         }
-        if(!threshFrame.empty())
-        {
-          cv::imshow("thresh", threshFrame);
-        }
-        cv::waitKey(1);
       }
 
       std::cout << "Stopped reading" << std::endl;
