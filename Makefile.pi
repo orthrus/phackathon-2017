@@ -32,7 +32,8 @@ LIBS:=	-lopencv_shape \
 				-lz \
 				-lgsm \
 				-lmp3lame \
-				-ljpeg
+				-ljpeg \
+				-lopenjp2
 
 CFLAGS= -std=c++14 -Wall -static $(INCLUDE_PATH)
 
