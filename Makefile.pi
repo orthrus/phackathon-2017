@@ -31,7 +31,8 @@ LIBS:=	-lopencv_shape \
 				-lswscale \
 				-lavutil \
 				-lz \
-				-lgsm
+				-lgsm \
+				-lmp3lame
 
 CFLAGS= -std=c++14 -Wall -static $(INCLUDE_PATH)
 
