@@ -2,7 +2,7 @@
 #include "cam.h"
 #include <iostream>
 #include <thread>
-#include <time>
+#include <time.h>
 
 CCam::CCam()
 {
