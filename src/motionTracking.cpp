@@ -559,7 +559,7 @@ int main(){
 			{
 				capture.read(*previousFrame);
 
-				processFrame(previousFrame, maskImage, iblur);
+				processFrame(*previousFrame, maskImage, iblur);
 
 				first = false;
 			}
