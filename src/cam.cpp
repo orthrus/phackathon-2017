@@ -32,7 +32,7 @@ void CCam::Start()
       while(_capture.read(frame))
       {
         cv::imshow("frame", frame);
-        cv::readKey(1);
+        cv::waitKey(1);
       }
 
       //cv::startWindowThread();
