@@ -26,7 +26,7 @@ void CCam::Start()
       std::cout << "Created window" << std::endl;
 
       cv::Mat frame;
-      while(capture.read(frame))
+      while(_capture.read(frame))
       {
         std::cout << "read frame" << std::endl;
         cv::imshow("frame", frame);
