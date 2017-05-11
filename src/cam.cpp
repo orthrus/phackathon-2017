@@ -43,7 +43,7 @@ void CCam::Start()
 
       std::thread t = std::thread([=]() mutable {
         cv::Mat frame1;
-        
+
         while(_running)
         {
           cv::Mat frame2, diffFrameTmp, threshFrameTmp;
@@ -87,6 +87,7 @@ void CCam::Start()
             prevTime = curTime;
             prevI = i;
           }
+          cv::waitKey(1);
         }
 
       });
