@@ -22,7 +22,11 @@ STATIC_LIBS:=	-Bdynamic			\
 				-lopencv_video			\
 				-lopencv_videostab 	\
 				-lc 								\
-				-lstdc++
+				-lstdc++						\
+				-lopencv_contrib		\
+				-lopencv_legacy			\
+				-lopencv_ocl				\
+				-lopencv_ts
 				
 #				-lopencv_videoio		\
 				-lopencv_shape			\
