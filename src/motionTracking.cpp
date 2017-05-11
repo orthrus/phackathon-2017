@@ -25,7 +25,6 @@
 
 using namespace std;
 using namespace cv;
-using namespace Leap;
 
 //our sensitivity value to be used in the threshold() function
 const static int SENSITIVITY_VALUE = 60;
