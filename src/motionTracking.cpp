@@ -456,7 +456,7 @@ long long getTimeMs()
 	clock_gettime(CLOCK_REALTIME, &spec);
     return (spec.tv_sec * 1000) + round(spec.tv_nsec / 1.0e6);
 }
-/*
+
 int main(){
 	#ifdef __linux__
 	ser.init(false);
@@ -718,4 +718,4 @@ int main(){
 	#endif
 	return 0;
 
-}*/
+}
