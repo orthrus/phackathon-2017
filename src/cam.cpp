@@ -34,12 +34,12 @@ void CCam::Start()
     		cv::Mat frame;
     		while (_capture.read(frame))
     		{
-    			std::stringstream ss;
+    			//std::stringstream ss;
     			cv::rectangle(frame, cv::Point(10, 2), cv::Point(100, 20), cv::Scalar(255, 255, 255), -1);
     			//ss << _capture.get(CV_CAP_PROP_POS_FRAMES);
-          ss << i++;
-    			std::string frameNumberString = ss.str();
-    			cv::putText(frame, frameNumberString.c_str(), cv::Point(15, 15), CV_FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 0, 0));
+          //ss << i++;
+    			//std::string frameNumberString = ss.str();
+    			//cv::putText(frame, frameNumberString.c_str(), cv::Point(15, 15), CV_FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 0, 0));
     			cv::imshow("frame", frame);
     		}
         _running = false;
