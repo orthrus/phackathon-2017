@@ -656,7 +656,7 @@ int main(){
 
 			frame1 = grayImage2.clone();
 
-			if(counter++ % 60 == 0)
+			if((++counter) % 60 == 0)
 			{
 				currTime = getTimeMs();
 				if(prevTime != 0)
