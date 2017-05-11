@@ -34,16 +34,14 @@ void CCam::Start()
       _running = true;
 
       int i = 0, prevI = 0;
-      cv::Mat frame1;
-      cv::Mat frame2;
-
-      cv::Mat diffFrame, diffFrameTmp;
-      cv::Mat threshFrame, threshFrameTmp;
+      
+      cv::Mat diffFrame, threshFrame;
 
       long long prevTime = 0;
       long long curTime = 0;
 
       std::thread t = std::thread([=]() {
+        cv::Mat frame1, frame2, diffFrameTmp, threshFrameTmp;
         while(_running)
         {
           if(frame1.empty())
