@@ -57,8 +57,8 @@ void CCam::Start()
           break;
         }
 
-        cv::absdiff(frame1, frame2, diffFrame);
-        cv::threshold(diffFrame, threshFrame, 80, 255, cv::THRESH_BINARY);
+        //cv::absdiff(frame1, frame2, diffFrame);
+        //cv::threshold(diffFrame, threshFrame, 80, 255, cv::THRESH_BINARY);
 
         frame1 = frame2;
 
@@ -75,7 +75,7 @@ void CCam::Start()
           prevI = i;
         }
 
-        cv::imshow("diff", diffFrame);
+        cv::imshow("diff", frame1);
         //cv::imshow("thresh", threshFrame);
         cv::waitKey(1);
       }
