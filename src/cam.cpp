@@ -114,9 +114,9 @@ void CCam::Start()
           std::cout << "show frame" << std::endl;
           cv::imshow("diff", diff);
         }
-        std::cout << "waitkey1" << std::endl;
+        //std::cout << "waitkey1" << std::endl;
         cv::waitKey(1);
-        std::cout << "waitkey2" << std::endl;
+        //std::cout << "waitkey2" << std::endl;
       }
 
 
