@@ -175,9 +175,12 @@ void *CSerial::doAsyncRead( void *ptr )
 
 void CSerial::doRead()
 {
-	char pReadBuf[4096];
+	const int iReadBufMaxLen = 4096;
+	char pReadBuf[iReadBufMaxLen];
+	int iReadBufLen = 0;
 	while(true)
 	{
+		iReadBufLen = 0;
 		usleep(1000000);
 
 		unsigned char szTmp[1024];
