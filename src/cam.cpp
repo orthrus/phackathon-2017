@@ -33,7 +33,7 @@ void CCam::Start()
     	{
         while(_running)
         {
-          cv::waitKey(1);
+
         }
     	});
 
@@ -48,6 +48,7 @@ void CCam::Start()
         //std::string frameNumberString = ss.str();
         //cv::putText(frame, frameNumberString.c_str(), cv::Point(15, 15), CV_FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 0, 0));
         cv::imshow("frame", frame);
+        cv::waitKey(1);
       }
 
       std::cout << "Stopped reading" << std::endl;
