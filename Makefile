@@ -4,14 +4,13 @@ TOOLPREFIX= $(TOOLPATH)/arm-linux-androideabi-
 SYSROOT= $(NDKPATH)/platforms/android-9/arch-arm
 CC= $(TOOLPREFIX)g++
 
-
-#INCLUDE_PATH:=-I/usr/include
-#LIBRARY_PATH:=-L/usr/lib
+INCLUDE_PATH:=
+LIBRARY_PATH:=
+	#-L$(NDKPATH)/sources/cxx-stl/stlport/libs/armeabi-v7a
 LIBS:=
+	#-llibstlport_static
 
-
-CFLAGS= -Wall --sysroot=$(SYSROOT) -static $(INCLUDE_PATH)
-
+CFLAGS= -std=c++14 -Wall --sysroot=$(SYSROOT) -static $(INCLUDE_PATH)
 
 SOURCES=$(wildcard src/*.cpp)
 OBJECTS=$(patsubst %.cpp,%.o, $(SOURCES))
@@ -24,5 +23,4 @@ clean:
 	rm -f pinball
 
 .cpp.o:
-	$(info OBJ $< ($@))
 	${CC} ${CFLAGS} ${INCLUDE_PATH} -c $< -o $@

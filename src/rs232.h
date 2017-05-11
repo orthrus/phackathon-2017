@@ -62,6 +62,10 @@ extern "C" {
 
 #endif
 
+#ifdef __macos__
+#include <sys/termios.h>
+#endif
+
 int RS232_OpenComport(int, int, const char *);
 int RS232_PollComport(int, unsigned char *, int);
 int RS232_SendByte(int, unsigned char);
@@ -82,5 +86,3 @@ void RS232_disableRTS(int);
 #endif
 
 #endif
-
-

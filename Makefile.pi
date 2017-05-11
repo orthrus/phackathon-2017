@@ -1,14 +1,16 @@
-NDKPATH =
-TOOLPATH=
-TOOLPREFIX=
-SYSROOT=
-CC= $(TOOLPREFIX)g++
+CC=g++
 
-INCLUDE_PATH:=-I/usr/local/include
-LIBRARY_PATH:=-L/usr/lib -L/usr/local/lib
+INCLUDE_PATH:=-I/usr/include \
+							-I/usr/local/include
+
+LIBRARY_PATH:=-L/usr/lib \
+							-L/usr/share/lib
+
 LIBS:=
+	#-llibstlport_static
 
-CFLAGS=-std=c++14 -Wall $(INCLUDE_PATH) -D__linux__ -D__macos__
+CFLAGS= -std=c++14 -Wall -static $(INCLUDE_PATH)
+
 
 SOURCES=$(wildcard src/*.cpp)
 OBJECTS=$(patsubst %.cpp,%.o, $(SOURCES))
