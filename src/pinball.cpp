@@ -1,6 +1,9 @@
 #include "serial.h"
 #include "rs232.h"
 #include "cam.h"
+
+#include <iostream>
+
 int main(void)
 {
     CCam cam;
