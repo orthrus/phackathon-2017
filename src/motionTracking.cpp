@@ -566,7 +566,7 @@ int main(){
 			
 			//copy second frame
 			capture.read(*currentFrame);
-			frame2 = &frame2;
+			currentFrame = &frame2;
 
 			/*processFrame(frame2, maskImage, iblur);
 
@@ -665,9 +665,9 @@ int main(){
 
 			}
 
-			cv::Mat* tmp = frame1;
-			frame2 = frame1;
-			frame1 = tmp;
+			cv::Mat* tmp = currentFrame;
+			currentFrame = previousFrame;
+			previousFrame = tmp;
 			//frame1 = grayImage2.clone();
 
 			if((++counter) % 60 == 0)
