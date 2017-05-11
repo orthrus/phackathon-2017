@@ -386,11 +386,11 @@ void searchForMovement(bool debug, Mat input, Mat &cameraFeed){
 				if (debug) drawRegion(cameraFeed, triggerFlipBottomRight.region, Scalar(255, 0, 255));
 			}
 
-			if (testTrigger(current, prediction, triggerFlipTopRight)) {
+			/*if (testTrigger(current, prediction, triggerFlipTopRight)) {
 				Flip(triggerFlipTopRight.id);
 				historyHits->Set(x, y);
 				if (debug) drawRegion(cameraFeed, triggerFlipTopRight.region, Scalar(255, 0, 255));
-			}			
+			}*/			
 
 		}
 
@@ -593,11 +593,11 @@ int main(){
 			//if tracking enabled, search for contours in our thresholded image
 			if (trackingEnabled) {
 				//std::cout << "search" << std::endl;
-				searchForMovement(debugMode, output, *currentFrame);
+				searchForMovement(debugMode, output, thresholdImage);
 				
 				if (debugMode)
 				{
-					imshow("debug", *currentFrame);
+					imshow("debug", thresholdImage);
 				}
 				else
 				{
