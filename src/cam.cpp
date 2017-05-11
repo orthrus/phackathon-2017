@@ -29,13 +29,6 @@ void CCam::Start()
       cv::namedWindow("frame");
       std::cout << "Created window" << std::endl;
       _running = true;
-      std::thread t = std::thread([=]() mutable
-    	{
-        while(_running)
-        {
-
-        }
-    	});
 
       int i = 0;
       cv::Mat frame;
@@ -48,7 +41,7 @@ void CCam::Start()
         //std::string frameNumberString = ss.str();
         //cv::putText(frame, frameNumberString.c_str(), cv::Point(15, 15), CV_FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 0, 0));
 
-        //cv::imshow("frame", frame);
+        cv::imshow("frame", frame);
         cv::waitKey(1);
       }
 
