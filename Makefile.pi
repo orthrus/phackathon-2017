@@ -26,7 +26,8 @@ STATIC_LIBS:=	-Bstatic			\
 				-lopencv_video			\
 				-lopencv_videoio		\
 				-lopencv_videostab 	\
-
+				-lc 								\
+				-lstdc++
 
 CFLAGS= -std=c++14 -Wall -static $(INCLUDE_PATH)
 
