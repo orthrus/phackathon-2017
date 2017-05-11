@@ -58,7 +58,7 @@ void CCam::Start()
         }
 
         cv::absdiff(frame1, frame2, diffFrame);
-        //cv::threshold(diffFrame, threshFrame, 80, 255, cv::THRESH_BINARY);
+        cv::threshold(diffFrame, threshFrame, 80, 255, cv::THRESH_BINARY);
 
         frame1 = frame2.clone();
 
@@ -79,7 +79,10 @@ void CCam::Start()
         {
           cv::imshow("diff", diffFrame);
         }
-        //cv::imshow("thresh", threshFrame);
+        if(!threshFrame.empty())
+        {
+          cv::imshow("thresh", threshFrame);
+        }
         cv::waitKey(1);
       }
 
