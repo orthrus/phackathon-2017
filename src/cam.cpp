@@ -67,10 +67,12 @@ void CCam::Start()
             std::lock_guard<std::mutex> lock(_mutex);
             if(!diffFrameTmp.empty())
             {
-              std::cout << "set diffFrame" << std::endl;
               diffFrame = diffFrameTmp.clone();
             }
-            threshFrame = threshFrameTmp.clone();
+            if(!threshFrameTmp.clone())
+            {
+              threshFrame = threshFrameTmp.clone();
+            }
           }
 
           frame1 = frame2.clone();
@@ -97,8 +99,7 @@ void CCam::Start()
 
       while(_running)
       {
-        cv::Mat diff;
-        cv::Mat thresh;
+        cv::Mat diff, thresh, frame;
         {
           std::lock_guard<std::mutex> lock(_mutex);
           if(!diffFrame.empty())
@@ -111,12 +112,13 @@ void CCam::Start()
             std::cout << "clone thresh" << std::endl;
             thresh = threshFrame.clone();
           }
+          frame = frame1.clone();
         }
 
         if(!diff.empty())
         {
           std::cout << "show frame" << std::endl;
-          cv::imshow("diff", diff);
+          cv::imshow("diff", frame1);
         }
         //std::cout << "waitkey1" << std::endl;
         cv::waitKey(1);
