@@ -25,6 +25,7 @@ void CCam::Start()
     {
       std::cout << "Set framerate" << std::endl;
 
+      cv::startWindowThread();
       cv::namedWindow("frame");
       std::cout << "Created window" << std::endl;
       _running = true;
