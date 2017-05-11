@@ -25,7 +25,7 @@ void CCam::Start()
     {
       std::cout << "Set framerate" << std::endl;
 
-      cv::startWindowThread();
+      //cv::startWindowThread();
       cv::namedWindow("frame");
       std::cout << "Created window" << std::endl;
       _running = true;
@@ -52,9 +52,6 @@ void CCam::Start()
 
       std::cout << "Stopped reading" << std::endl;
       _running = false;
-
-
-      t.join();
     }
 
     _capture.release();
