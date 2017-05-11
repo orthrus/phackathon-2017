@@ -577,7 +577,7 @@ int main(){
 			//perform frame differencing with the sequential images. This will output an "intensity image"
 			//do not confuse this with a threshold image, we will need to perform thresholding afterwards.
 			//std::cout << "diff" << std::endl;
-			cv::absdiff(*c, *currentFrame, differenceImage);
+			cv::absdiff(*previousFrame, *currentFrame, differenceImage);
 			//threshold intensity image at a given sensitivity value
 			
 			//std::cout << "threshold1" << std::endl;
