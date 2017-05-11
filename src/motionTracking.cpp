@@ -70,7 +70,7 @@ struct TPosition
 vector<Point2f> leftRegion;
 vector<Point2f> rightRegion;
 
-double latency = 1.0;
+double latency = 2.0;
 
 
 class History
